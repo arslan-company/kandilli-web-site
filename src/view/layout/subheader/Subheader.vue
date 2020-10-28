@@ -28,6 +28,13 @@
               >
                 {{ breadcrumb.title }}
               </router-link>
+              <span
+                class="text-muted"
+                :key="`${i}-${breadcrumb.id}`"
+                v-if="!breadcrumb.route"
+              >
+                {{ breadcrumb.title }}
+              </span>
             </li>
           </template>
         </ul>
