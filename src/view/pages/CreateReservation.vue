@@ -18,7 +18,7 @@
             >
               <div class="wizard-label">
                 <i class="wizard-icon far fa-address-card"></i>
-                <h3 class="wizard-title" style="margin-top:30px">
+                <h3 class="wizard-title" style="margin-top: 30px">
                   1. Müşteri Bilgileri
                 </h3>
               </div>
@@ -44,7 +44,7 @@
 
         <!--begin: Wizard Body-->
         <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
-          <div class="col-xl-12 col-xxl-7">
+          <div class="col-xl-12 col-xxl-9">
             <!--begin: Wizard Form-->
             <form class="form" id="kt_form">
               <!--begin: Wizard Step 1-->
@@ -122,6 +122,166 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
+                <div class="fc fc-ltr fc-unthemed">
+                  <div class="fc-view-container">
+                    <div
+                      class="fc-view fc-listWeek-view fc-list-view fc-widget-content"
+                    >
+                      <div class="fc-scroller" style="overflow: hidden auto">
+                        <table class="fc-list-table">
+                          <tbody>
+                            <tr class="fc-list-heading" data-date="2020-10-28">
+                              <td class="fc-widget-header" colspan="3">
+                                <a
+                                  class="fc-list-heading-main"
+                                  data-goto='{"date":"2020-10-28","type":"day"}'
+                                  >Wednesday</a
+                                ><a
+                                  class="fc-list-heading-alt"
+                                  style="float: right"
+                                  data-goto='{"date":"2020-10-28","type":"day"}'
+                                  >October 28, 2020</a
+                                >
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                all-day
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Conference</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor eius mod tempor labore
+                                </div>
+                              </td>
+                            </tr>
+                            <tr
+                              class="fc-list-item fc-event-solid-info fc-event-light fc-has-url"
+                            >
+                              <td class="fc-list-item-time fc-widget-content">
+                                all-day
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a href="http://google.com/"
+                                  >Click for Google</a
+                                >
+                                <div class="fc-description">
+                                  Lorem ipsum dolor sit amet, labore
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                all-day
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Conference</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor eius mod tempor labore
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item">
+                              <td class="fc-list-item-time fc-widget-content">
+                                10:30am - 12:30pm
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Meeting</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor eiu idunt ut labore
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-info">
+                              <td class="fc-list-item-time fc-widget-content">
+                                12:00pm
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Lunch</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor sit amet, ut labore
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-warning">
+                              <td class="fc-list-item-time fc-widget-content">
+                                2:30pm
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Meeting</a>
+                                <div class="fc-description">
+                                  Lorem ipsum conse ctetur adipi scing
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-info">
+                              <td class="fc-list-item-time fc-widget-content">
+                                5:30pm
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Happy Hour</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor sit amet, conse ctetur
+                                </div>
+                              </td>
+                            </tr>
+                            <tr
+                              class="fc-list-item fc-event-solid-danger fc-event-light"
+                            >
+                              <td class="fc-list-item-time fc-widget-content">
+                                5:00am
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Dinner</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor sit ctetur adipi scing
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                7:00am
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Birthday Party</a>
+                                <div class="fc-description">
+                                  Lorem ipsum dolor sit amet, scing
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <b-row>
                   <b-col>
                     <b-form-group label="Kişi Sayısı" label-for="customerCount">
@@ -240,7 +400,7 @@ import KTWizard from "@/assets/js/components/wizard";
 import Swal from "sweetalert2";
 
 export default {
-  name: "Wizard-1",
+  name: "CreateReservation",
   data() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
