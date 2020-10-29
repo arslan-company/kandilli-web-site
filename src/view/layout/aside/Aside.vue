@@ -16,142 +16,87 @@
         <!--begin::Nav-->
         <ul class="nav flex-column" role="tablist">
           <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'Latest Projects'"
+          <router-link
+            to="/CreateReservation"
+            v-slot="{ href, navigate, isActive, isExactActive }"
           >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg"
-              data-toggle="tab"
-              v-on:click="setActiveTab"
-              data-tab="0"
+            <li
+              aria-haspopup="true"
+              data-menu-toggle="hover"
+              class="menu-item"
+              :class="[
+                isActive && 'menu-item-active',
+                isExactActive && 'menu-item-active'
+              ]"
+              v-b-tooltip.hover.right="'Randevu Oluşturma'"
             >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/Layout/Layout-4-blocks.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
+              <a
+                :href="href"
+                class="menu-link nav-link btn btn-icon btn-clean btn-lg"
+                @click="navigate"
+              >
+                <span class="svg-icon svg-icon-xl">
+                  <inline-svg
+                    src="media/svg/icons/Layout/Layout-4-blocks.svg"
+                  />
+                </span>
+              </a>
+            </li>
+          </router-link>
           <!--end::Item-->
           <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'Metronic Features'"
+          <router-link
+            to="/CustomerList"
+            v-slot="{ href, navigate, isActive, isExactActive }"
           >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg"
-              data-toggle="tab"
-              v-on:click="setActiveTab"
-              data-tab="1"
+            <li
+              aria-haspopup="true"
+              data-menu-toggle="hover"
+              class="menu-item"
+              :class="[
+                isActive && 'menu-item-active',
+                isExactActive && 'menu-item-active'
+              ]"
+              v-b-tooltip.hover.right="'Müşteri Listeleme'"
             >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/Communication/Group.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
+              <a
+                :href="href"
+                class="menu-link nav-link btn btn-icon btn-clean btn-lg"
+                @click="navigate"
+              >
+                <span class="svg-icon svg-icon-xl">
+                  <inline-svg src="media/svg/icons/Communication/Group.svg" />
+                </span>
+              </a>
+            </li>
+          </router-link>
           <!--end::Item-->
           <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'Latest Reports'"
+          <router-link
+            to="/ReservationList"
+            v-slot="{ href, navigate, isActive, isExactActive }"
           >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg"
-              data-toggle="tab"
-              v-on:click="setActiveTab"
-              data-tab="2"
+            <li
+              aria-haspopup="true"
+              data-menu-toggle="hover"
+              class="menu-item"
+              :class="[
+                isActive && 'menu-item-active',
+                isExactActive && 'menu-item-active'
+              ]"
+              v-b-tooltip.hover.right="'Randevu Listeleme'"
             >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/Media/Equalizer.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
-          <!--end::Item-->
-          <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'Project Management'"
-          >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg"
-              role="tab"
-              v-on:click="setActiveTab"
-              data-tab="3"
-            >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/General/Shield-check.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
-          <!--end::Item-->
-          <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'User Management'"
-          >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg active"
-              role="tab"
-              v-on:click="setActiveTab"
-              data-tab="4"
-            >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/Home/Library.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
-          <!--end::Item-->
-          <!--begin::Item-->
-          <li
-            class="nav-item mb-3"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            v-b-tooltip.hover.right="'Finance &amp; Accounting'"
-          >
-            <a
-              href="#"
-              class="nav-link btn btn-icon btn-clean btn-lg"
-              role="tab"
-              v-on:click="setActiveTab"
-              data-tab="5"
-            >
-              <span class="svg-icon svg-icon-xl">
-                <!--begin::Svg Icon-->
-                <inline-svg src="media/svg/icons/Files/File-plus.svg" />
-                <!--end::Svg Icon-->
-              </span>
-            </a>
-          </li>
+              <a
+                :href="href"
+                class="menu-link nav-link btn btn-icon btn-clean btn-lg"
+                @click="navigate"
+              >
+                <span class="svg-icon svg-icon-xl">
+                  <inline-svg src="media/svg/icons/Media/Equalizer.svg" />
+                </span>
+              </a>
+            </li>
+          </router-link>
           <!--end::Item-->
         </ul>
         <!--end::Nav-->
@@ -175,13 +120,13 @@
         </span>
         <!--end::Aside Toggle-->
         <!--begin::Quick Actions-->
-        <KTQuickActions></KTQuickActions>
+        <!-- <KTQuickActions></KTQuickActions> -->
         <!--end::Quick Actions-->
         <!--begin::Quick Panel-->
-        <KTQuickPanel></KTQuickPanel>
+        <!-- <KTQuickPanel></KTQuickPanel> -->
         <!--end::Quick Panel-->
         <!--begin::User-->
-        <KTQuickUser></KTQuickUser>
+        <!-- <KTQuickUser></KTQuickUser> -->
         <!--end::User-->
       </div>
       <!--end::Footer-->
@@ -1885,9 +1830,9 @@ import KTLayoutAsideMenu from "@/assets/js/layout/base/aside-menu.js";
 import KTLayoutAsideToggle from "@/assets/js/layout/base/aside-toggle.js";
 import KTBrand from "@/view/layout/brand/Brand.vue";
 import KTMenu from "@/view/layout/aside/Menu.vue";
-import KTQuickActions from "@/view/layout/extras/offcanvas/QuickActions.vue";
-import KTQuickUser from "@/view/layout/extras/offcanvas/QuickUser.vue";
-import KTQuickPanel from "@/view/layout/extras/offcanvas/QuickPanel.vue";
+// import KTQuickActions from "@/view/layout/extras/offcanvas/QuickActions.vue";
+// import KTQuickUser from "@/view/layout/extras/offcanvas/QuickUser.vue";
+// import KTQuickPanel from "@/view/layout/extras/offcanvas/QuickPanel.vue";
 
 export default {
   name: "KTAside",
@@ -1900,10 +1845,10 @@ export default {
   },
   components: {
     KTBrand,
-    KTMenu,
-    KTQuickActions,
-    KTQuickUser,
-    KTQuickPanel
+    KTMenu
+    // KTQuickActions,
+    // KTQuickUser,
+    // KTQuickPanel
   },
   mounted() {
     this.$nextTick(() => {
