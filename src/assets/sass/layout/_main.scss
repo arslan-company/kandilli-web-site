@@ -4,7 +4,8 @@
 
 // Body
 body {
-	background: $page-bg;
+	background: no-repeat center top;
+	background-size: 100% $page-bg-height;
 }
 
 // Desktop Mode

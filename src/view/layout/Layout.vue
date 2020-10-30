@@ -9,10 +9,14 @@
     <!-- begin::Body -->
     <div class="d-flex flex-row flex-column-fluid page">
       <!-- begin:: Aside Left -->
-      <KTAside v-if="asideEnabled"></KTAside>
+<!--      <KTAside v-if="asideEnabled"></KTAside>-->
       <!-- end:: Aside Left -->
 
       <div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
+        <!-- begin:: Header -->
+        <KTHeader></KTHeader>
+        <!-- end:: Header -->
+
         <!-- begin:: Content -->
         <div
           id="kt_content"
@@ -36,9 +40,17 @@
                 container: !contentFluid
               }"
             >
-              <transition name="fade-in-up">
-                <router-view />
-              </transition>
+              <div class="d-lg-flex flex-row-fluid">
+                <!-- begin:: Aside Left -->
+                <KTAside v-if="asideEnabled"></KTAside>
+                <!-- end:: Aside Left -->
+
+                <div class="content-wrapper flex-row-fluid">
+                  <transition name="fade-in-up">
+                    <router-view />
+                  </transition>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +73,7 @@ import KTSubheader from "@/view/layout/subheader/Subheader.vue";
 import KTStickyToolbar from "@/view/layout/extras/StickyToolbar.vue";
 import KTScrollTop from "@/view/layout/extras/ScrollTop";
 import Loader from "@/view/content/Loader.vue";
+import KTHeader from "@/view/layout/header/Header.vue";
 import {
   ADD_BODY_CLASSNAME,
   REMOVE_BODY_CLASSNAME
@@ -75,7 +88,8 @@ export default {
     KTSubheader,
     KTStickyToolbar,
     KTScrollTop,
-    Loader
+    Loader,
+    KTHeader
   },
   beforeMount() {
     // show page loading

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="subheader py-3 py-lg-8 subheader-transparent"
+    class="subheader py-2 py-lg-12 subheader-transparent"
     v-bind:class="subheaderClasses"
     id="kt_subheader"
   >
@@ -8,30 +8,41 @@
       class="d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap"
       v-bind:class="{ 'container-fluid': widthFluid, container: !widthFluid }"
     >
-      <div class="d-flex align-items-baseline mr-5">
-        <!--begin::Page Title-->
-        <h2 class="subheader-title text-dark font-weight-bold my-2 mr-3">
-          {{ title }}
-        </h2>
-        <!--end::Page Title-->
-        <!--begin::Breadcrumb-->
-        <ul
-          class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold my-2 p-0"
-        >
-          <template v-for="(breadcrumb, i) in breadcrumbs">
-            <li :key="`${i}-${breadcrumb.id}`" class="breadcrumb-item">
+      <div class="d-flex align-items-center flex-wrap mr-2">
+        <!--begin::Heading-->
+        <div class="d-flex flex-column">
+          <!--begin::Title-->
+          <h2 class="text-white font-weight-bold my-2 mr-5">
+            {{ title }}
+          </h2>
+          <ul class="d-flex align-items-center font-weight-bold my-2">
+            <router-link :to="'/'" class="opacity-75 hover-opacity-100">
+              <i class="flaticon2-shelter text-white icon-1x"></i>
+            </router-link>
+
+            <template v-for="(breadcrumb, i) in breadcrumbs">
+              <span
+                class="label label-dot label-sm bg-white opacity-75 mx-3"
+                :key="i"
+              ></span>
               <router-link
                 :key="`${i}-${breadcrumb.id}`"
                 v-if="breadcrumb.route"
                 :to="breadcrumb.route"
-                class="text-muted"
+                class="text-white text-hover-white opacity-75 hover-opacity-100"
               >
                 {{ breadcrumb.title }}
               </router-link>
-            </li>
-          </template>
-        </ul>
-        <!--end::Breadcrumb-->
+              <span
+                class="text-white text-hover-white opacity-75 hover-opacity-100"
+                :key="`${i}-${breadcrumb.id}`"
+                v-if="!breadcrumb.route"
+              >
+                {{ breadcrumb.title }}
+              </span>
+            </template>
+          </ul>
+        </div>
       </div>
 
       <!--begin::Toolbar-->

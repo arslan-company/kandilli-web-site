@@ -54,6 +54,8 @@
 import { mapGetters } from "vuex";
 import KTTopbar from "@/view/layout/header/Topbar.vue";
 import KTMenu from "@/view/layout/header/Menu.vue";
+import KTLayoutHeader from "@/assets/js/layout/base/header.js";
+import KTLayoutHeaderMenu from "@/assets/js/layout/base/header-menu.js";
 
 export default {
   name: "KTHeader",
@@ -61,7 +63,16 @@ export default {
     KTTopbar,
     KTMenu
   },
-  mounted() {},
+  mounted() {
+    // Init Desktop & Mobile Headers
+    KTLayoutHeader.init("kt_header", "kt_header_mobile");
+
+    // Init Header Menu
+    KTLayoutHeaderMenu.init(
+      this.$refs["kt_header_menu"],
+      this.$refs["kt_header_menu_wrapper"]
+    );
+  },
   computed: {
     ...mapGetters(["layoutConfig", "getClasses"]),
 
