@@ -1197,9 +1197,34 @@
                       <span class="fc-event-dot"></span>
                     </td>
                     <td class="fc-list-item-title fc-widget-content">
-                      <a>1 Randevu</a>
+                      <a>9 Randevu</a>
                       <div class="fc-description">
-                        9 masa uygun.
+                        1 masa uygun.
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="fc-list-item fc-event-danger">
+                    <td class="fc-list-item-time fc-widget-content">
+                      17.30 - 19.00
+                    </td>
+                    <td class="fc-list-item-marker fc-widget-content">
+                      <span class="fc-event-dot"></span>
+                    </td>
+                    <td class="fc-list-item-title fc-widget-content">
+                      <a>Boş masa kalmamıştır.</a>
+                    </td>
+                  </tr>
+                  <tr class="fc-list-item fc-event-primary">
+                    <td class="fc-list-item-time fc-widget-content">
+                      19.00 - 20.30
+                    </td>
+                    <td class="fc-list-item-marker fc-widget-content">
+                      <span class="fc-event-dot"></span>
+                    </td>
+                    <td class="fc-list-item-title fc-widget-content">
+                      <a>8 Randevu</a>
+                      <div class="fc-description">
+                        2 masa uygun.
                       </div>
                     </td>
                   </tr>

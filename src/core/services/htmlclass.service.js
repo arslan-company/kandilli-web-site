@@ -49,6 +49,11 @@ const HtmlClass = {
       document.body.style.backgroundImage = `url(${bgImage})`;
     }
 
+    // Offcanvas directions
+    store.dispatch(ADD_BODY_CLASSNAME, "quick-panel-right");
+    store.dispatch(ADD_BODY_CLASSNAME, "demo-panel-right");
+    store.dispatch(ADD_BODY_CLASSNAME, "offcanvas-right");
+
     // Properly close mobile header menu
     store.dispatch(REMOVE_BODY_CLASSNAME, "header-menu-wrapper-on");
   },
