@@ -224,8 +224,6 @@
                                   <td class="fc-event-container">
                                     <a
                                       class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-event-danger fc-event-solid-warning fc-draggable fc-resizable"
-                                      data-original-title=""
-                                      title=""
                                     >
                                       <div class="fc-content">
                                         <span class="fc-title"
@@ -1118,124 +1116,90 @@
                       <a
                         class="fc-list-heading-main"
                         data-goto='{"date":"2020-10-28","type":"day"}'
-                        >Wednesday</a
+                        >Saturday</a
                       ><a
                         class="fc-list-heading-alt"
                         style="float: right"
                         data-goto='{"date":"2020-10-28","type":"day"}'
-                        >October 28, 2020</a
+                        >October 31, 2020</a
                       >
                     </td>
                   </tr>
                   <tr class="fc-list-item fc-event-primary">
-                    <td class="fc-list-item-time fc-widget-content">all-day</td>
-                    <td class="fc-list-item-marker fc-widget-content">
-                      <span class="fc-event-dot"></span>
-                    </td>
-                    <td class="fc-list-item-title fc-widget-content">
-                      <a>Conference</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor eius mod tempor labore
-                      </div>
-                    </td>
-                  </tr>
-                  <tr
-                    class="fc-list-item fc-event-solid-info fc-event-light fc-has-url"
-                  >
-                    <td class="fc-list-item-time fc-widget-content">all-day</td>
-                    <td class="fc-list-item-marker fc-widget-content">
-                      <span class="fc-event-dot"></span>
-                    </td>
-                    <td class="fc-list-item-title fc-widget-content">
-                      <a href="http://google.com/">Click for Google</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor sit amet, labore
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="fc-list-item fc-event-primary">
-                    <td class="fc-list-item-time fc-widget-content">all-day</td>
-                    <td class="fc-list-item-marker fc-widget-content">
-                      <span class="fc-event-dot"></span>
-                    </td>
-                    <td class="fc-list-item-title fc-widget-content">
-                      <a>Conference</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor eius mod tempor labore
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="fc-list-item">
                     <td class="fc-list-item-time fc-widget-content">
-                      10:30am - 12:30pm
+                      8.30 - 10.00
+                    </td>
+                    <td class="fc-list-item fc-event-solid-info fc-event-light">
+                      <span class="fc-event-dot"></span>
+                    </td>
+                    <td class="fc-list-item-title fc-widget-content">
+                      <a>Seans Süresi Geçti</a>
+                    </td>
+                  </tr>
+                  <tr class="fc-list-item fc-event-primary">
+                    <td class="fc-list-item-time fc-widget-content">
+                      10.00 - 11.30
                     </td>
                     <td class="fc-list-item-marker fc-widget-content">
                       <span class="fc-event-dot"></span>
                     </td>
                     <td class="fc-list-item-title fc-widget-content">
-                      <a>Meeting</a>
+                      <a>8 Randevu</a>
                       <div class="fc-description">
-                        Lorem ipsum dolor eiu idunt ut labore
+                        2 masa uygun.
                       </div>
                     </td>
                   </tr>
-                  <tr class="fc-list-item fc-event-info">
-                    <td class="fc-list-item-time fc-widget-content">12:00pm</td>
+                  <tr class="fc-list-item fc-event-danger">
+                    <td class="fc-list-item-time fc-widget-content">
+                      11.30 - 13.00
+                    </td>
                     <td class="fc-list-item-marker fc-widget-content">
                       <span class="fc-event-dot"></span>
                     </td>
                     <td class="fc-list-item-title fc-widget-content">
-                      <a>Lunch</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor sit amet, ut labore
-                      </div>
+                      <a>Boş masa kalmamıştır.</a>
                     </td>
                   </tr>
-                  <tr class="fc-list-item fc-event-warning">
-                    <td class="fc-list-item-time fc-widget-content">2:30pm</td>
+                  <tr class="fc-list-item fc-event-primary">
+                    <td class="fc-list-item-time fc-widget-content">
+                      13.00 - 14.30
+                    </td>
                     <td class="fc-list-item-marker fc-widget-content">
                       <span class="fc-event-dot"></span>
                     </td>
                     <td class="fc-list-item-title fc-widget-content">
-                      <a>Meeting</a>
+                      <a>3 Randevu</a>
                       <div class="fc-description">
-                        Lorem ipsum conse ctetur adipi scing
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="fc-list-item fc-event-info">
-                    <td class="fc-list-item-time fc-widget-content">5:30pm</td>
-                    <td class="fc-list-item-marker fc-widget-content">
-                      <span class="fc-event-dot"></span>
-                    </td>
-                    <td class="fc-list-item-title fc-widget-content">
-                      <a>Happy Hour</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor sit amet, conse ctetur
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="fc-list-item fc-event-solid-danger fc-event-light">
-                    <td class="fc-list-item-time fc-widget-content">5:00am</td>
-                    <td class="fc-list-item-marker fc-widget-content">
-                      <span class="fc-event-dot"></span>
-                    </td>
-                    <td class="fc-list-item-title fc-widget-content">
-                      <a>Dinner</a>
-                      <div class="fc-description">
-                        Lorem ipsum dolor sit ctetur adipi scing
+                        7 masa uygun.
                       </div>
                     </td>
                   </tr>
                   <tr class="fc-list-item fc-event-primary">
-                    <td class="fc-list-item-time fc-widget-content">7:00am</td>
+                    <td class="fc-list-item-time fc-widget-content">
+                      14.30 - 16.00
+                    </td>
                     <td class="fc-list-item-marker fc-widget-content">
                       <span class="fc-event-dot"></span>
                     </td>
                     <td class="fc-list-item-title fc-widget-content">
-                      <a>Birthday Party</a>
+                      <a>5 Randevu</a>
                       <div class="fc-description">
-                        Lorem ipsum dolor sit amet, scing
+                        5 masa uygun.
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="fc-list-item fc-event-primary">
+                    <td class="fc-list-item-time fc-widget-content">
+                      16.00 - 17.30
+                    </td>
+                    <td class="fc-list-item-marker fc-widget-content">
+                      <span class="fc-event-dot"></span>
+                    </td>
+                    <td class="fc-list-item-title fc-widget-content">
+                      <a>1 Randevu</a>
+                      <div class="fc-description">
+                        9 masa uygun.
                       </div>
                     </td>
                   </tr>

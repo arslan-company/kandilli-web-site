@@ -26,7 +26,8 @@
             class="font-weight-bolder text-center font-size-h4 font-size-h1-lg"
             style="color: #986923;"
           >
-            Kandilli Pastanesi <br /> Randevu Uygulaması
+            Kandilli Pastanesi <br />
+            Randevu Uygulaması
           </h3>
         </div>
         <div
@@ -203,9 +204,7 @@ export default {
     ...mapGetters(["currentUser"]),
 
     backgroundImage() {
-      return (
-        process.env.BASE_URL + "media/svg/illustrations/working.svg"
-      );
+      return process.env.BASE_URL + "media/svg/illustrations/working.svg";
     }
   },
   mounted() {
