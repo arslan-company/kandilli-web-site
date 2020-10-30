@@ -31,6 +31,11 @@ export default new Router({
           component: () => import("@/view/pages/CustomerList.vue")
         },
         {
+          path: "/ReservationList",
+          name: "ReservationList",
+          component: () => import("@/view/pages/ReservationList.vue")
+        },
+        {
           path: "/vue-bootstrap",
           name: "vue-bootstrap",
           component: () =>
