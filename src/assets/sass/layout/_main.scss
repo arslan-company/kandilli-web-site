@@ -4,7 +4,9 @@
 
 // Body
 body {
-	background: no-repeat center top;
+	background: $page-bg;
+	background-repeat: no-repeat;
+	background-position: center top;
 	background-size: 100% $page-bg-height;
 }
 
