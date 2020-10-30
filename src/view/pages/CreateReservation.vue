@@ -126,6 +126,112 @@
                   <div class="fc-view-container">
                     <div
                       class="fc-view fc-listWeek-view fc-list-view fc-widget-content"
+                      :hidden="isShowMonth"
+                      style="margin-bottom:3%;"
+                    >
+                      <div class="fc-scroller" style="overflow: hidden auto">
+                        <table class="fc-list-table">
+                          <tbody>
+                            <tr class="fc-list-heading" data-date="2020-10-28">
+                              <td class="fc-widget-header" colspan="3">
+                                <a
+                                  class="fc-list-heading-main"
+                                  data-goto='{"date":"2020-10-28","type":"day"}'
+                                  >Saturday</a
+                                ><a
+                                  class="fc-list-heading-alt"
+                                  style="float: right"
+                                  data-goto='{"date":"2020-10-28","type":"day"}'
+                                  >October 31, 2020</a
+                                >
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                8.30 - 10.00
+                              </td>
+                              <td
+                                class="fc-list-item fc-event-solid-info fc-event-light"
+                              >
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Seans Süresi Geçti</a>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                10.00 - 11.30
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>8 Randevu</a>
+                                <div class="fc-description">
+                                  2 masa uygun.
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-danger">
+                              <td class="fc-list-item-time fc-widget-content">
+                                11.30 - 13.00
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>Boş masa kalmamıştır.</a>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                13.00 - 14.30
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>3 Randevu</a>
+                                <div class="fc-description">
+                                  7 masa uygun.
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                14.30 - 16.00
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>5 Randevu</a>
+                                <div class="fc-description">
+                                  5 masa uygun.
+                                </div>
+                              </td>
+                            </tr>
+                            <tr class="fc-list-item fc-event-primary">
+                              <td class="fc-list-item-time fc-widget-content">
+                                16.00 - 17.30
+                              </td>
+                              <td class="fc-list-item-marker fc-widget-content">
+                                <span class="fc-event-dot"></span>
+                              </td>
+                              <td class="fc-list-item-title fc-widget-content">
+                                <a>1 Randevu</a>
+                                <div class="fc-description">
+                                  9 masa uygun.
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- <div
+                      class="fc-view fc-listWeek-view fc-list-view fc-widget-content"
                     >
                       <div class="fc-scroller" style="overflow: hidden auto">
                         <table class="fc-list-table">
@@ -279,7 +385,7 @@
                           </tbody>
                         </table>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <b-row>
