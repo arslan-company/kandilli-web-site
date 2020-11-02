@@ -29,7 +29,7 @@ export default new Router({
           path: "/ReservationList",
           name: "ReservationList",
           component: () => import("@/view/pages/ReservationList.vue")
-        },
+        }
       ]
     },
     {

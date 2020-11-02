@@ -9,7 +9,7 @@
     <!-- begin::Body -->
     <div class="d-flex flex-row flex-column-fluid page">
       <!-- begin:: Aside Left -->
-<!--      <KTAside v-if="asideEnabled"></KTAside>-->
+      <!--      <KTAside v-if="asideEnabled"></KTAside>-->
       <!-- end:: Aside Left -->
 
       <div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
