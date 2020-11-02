@@ -110,6 +110,7 @@
                       class="mb-8"
                       :min="min"
                       placeholder=""
+                      @input="onChangeDate"
                     ></b-form-datepicker>
                   </b-col>
                   <b-col>
@@ -122,272 +123,25 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
-                <div class="fc fc-ltr fc-unthemed">
-                  <div class="fc-view-container">
-                    <div
-                      class="fc-view fc-listWeek-view fc-list-view fc-widget-content"
-                      :hidden="isShowMonth"
-                      style="margin-bottom:3%;"
-                    >
-                      <div class="fc-scroller" style="overflow: hidden auto">
-                        <table class="fc-list-table">
-                          <tbody>
-                            <tr class="fc-list-heading" data-date="2020-10-28">
-                              <td class="fc-widget-header" colspan="3">
-                                <a
-                                  class="fc-list-heading-main"
-                                  data-goto='{"date":"2020-10-28","type":"day"}'
-                                  >Saturday</a
-                                ><a
-                                  class="fc-list-heading-alt"
-                                  style="float: right"
-                                  data-goto='{"date":"2020-10-28","type":"day"}'
-                                  >October 31, 2020</a
-                                >
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                8.30 - 10.00
-                              </td>
-                              <td
-                                class="fc-list-item fc-event-solid-info fc-event-light"
-                              >
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Seans Süresi Geçti</a>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                10.00 - 11.30
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>8 Randevu</a>
-                                <div class="fc-description">
-                                  2 masa uygun.
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-danger">
-                              <td class="fc-list-item-time fc-widget-content">
-                                11.30 - 13.00
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Boş masa kalmamıştır.</a>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                13.00 - 14.30
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>3 Randevu</a>
-                                <div class="fc-description">
-                                  7 masa uygun.
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                14.30 - 16.00
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>5 Randevu</a>
-                                <div class="fc-description">
-                                  5 masa uygun.
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                16.00 - 17.30
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>1 Randevu</a>
-                                <div class="fc-description">
-                                  9 masa uygun.
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <!-- <div
-                      class="fc-view fc-listWeek-view fc-list-view fc-widget-content"
-                    >
-                      <div class="fc-scroller" style="overflow: hidden auto">
-                        <table class="fc-list-table">
-                          <tbody>
-                            <tr class="fc-list-heading" data-date="2020-10-28">
-                              <td class="fc-widget-header" colspan="3">
-                                <a
-                                  class="fc-list-heading-main"
-                                  data-goto='{"date":"2020-10-28","type":"day"}'
-                                  >Wednesday</a
-                                ><a
-                                  class="fc-list-heading-alt"
-                                  style="float: right"
-                                  data-goto='{"date":"2020-10-28","type":"day"}'
-                                  >October 28, 2020</a
-                                >
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                all-day
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Conference</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor eius mod tempor labore
-                                </div>
-                              </td>
-                            </tr>
-                            <tr
-                              class="fc-list-item fc-event-solid-info fc-event-light fc-has-url"
-                            >
-                              <td class="fc-list-item-time fc-widget-content">
-                                all-day
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a href="http://google.com/"
-                                  >Click for Google</a
-                                >
-                                <div class="fc-description">
-                                  Lorem ipsum dolor sit amet, labore
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                all-day
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Conference</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor eius mod tempor labore
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item">
-                              <td class="fc-list-item-time fc-widget-content">
-                                10:30am - 12:30pm
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Meeting</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor eiu idunt ut labore
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-info">
-                              <td class="fc-list-item-time fc-widget-content">
-                                12:00pm
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Lunch</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor sit amet, ut labore
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-warning">
-                              <td class="fc-list-item-time fc-widget-content">
-                                2:30pm
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Meeting</a>
-                                <div class="fc-description">
-                                  Lorem ipsum conse ctetur adipi scing
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-info">
-                              <td class="fc-list-item-time fc-widget-content">
-                                5:30pm
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Happy Hour</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor sit amet, conse ctetur
-                                </div>
-                              </td>
-                            </tr>
-                            <tr
-                              class="fc-list-item fc-event-solid-danger fc-event-light"
-                            >
-                              <td class="fc-list-item-time fc-widget-content">
-                                5:00am
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Dinner</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor sit ctetur adipi scing
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="fc-list-item fc-event-primary">
-                              <td class="fc-list-item-time fc-widget-content">
-                                7:00am
-                              </td>
-                              <td class="fc-list-item-marker fc-widget-content">
-                                <span class="fc-event-dot"></span>
-                              </td>
-                              <td class="fc-list-item-title fc-widget-content">
-                                <a>Birthday Party</a>
-                                <div class="fc-description">
-                                  Lorem ipsum dolor sit amet, scing
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div> -->
-                  </div>
-                </div>
+                <vue-cal
+                  :selected-date="reservation.date"
+                  :time-from="9 * 60"
+                  :time-to="20 * 60"
+                  :time-step="90"
+                  :disable-views="['years', 'year', 'month', 'week']"
+                  :events="events"
+                  :split-days="splitDays"
+                  :hidden="!showCalendar"
+                  @event-focus="Clicklendin($event)"
+                  @view-change="ViewClicked($event)"
+                  today-button
+                  sticky-split-labels
+                  hide-view-selector
+                  active-view="day"
+                  style="margin-bottom:3%;"
+                  locale="tr"
+                >
+                </vue-cal>
                 <b-row>
                   <b-col>
                     <b-form-group label="Kişi Sayısı" label-for="customerCount">
@@ -504,14 +258,19 @@ import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import KTUtil from "@/assets/js/components/util";
 import KTWizard from "@/assets/js/components/wizard";
 import Swal from "sweetalert2";
+import VueCal from "vue-cal";
+import "vue-cal/dist/vuecal.css";
+import "vue-cal/dist/i18n/tr.js";
 
 export default {
   name: "CreateReservation",
+  components: { VueCal },
   data() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
+      showCalendar: false,
       reservation: {
         date: "",
         dayPart: "",
@@ -525,8 +284,49 @@ export default {
         lastName: "",
         email: ""
       },
-      dayPartList: ["Sabah", "Öğle", "Akşam"],
-      min: minDate
+      dayPartList: [
+        {
+          text: "Kahvaltı",
+          value: 1
+        },
+        {
+          text: "Pattiserie",
+          value: 2
+        },
+        {
+          text: "Pastane",
+          value: 3
+        }
+      ],
+      min: minDate,
+      splitDays: [
+        { id: 1, class: "salon1", label: "Salon 1" },
+        { id: 2, class: "salon2", label: "Salon 2" },
+        { id: 3, class: "salon3", label: "Salon 3" },
+        { id: 4, class: "salon4", label: "Salon 4" },
+        { id: 5, class: "bahce5", label: "Bahçe 5" },
+        { id: 6, class: "bahce7", label: "Bahçe 7" },
+        { id: 7, class: "bahce8", label: "Bahçe 8" },
+        { id: 8, class: "bahce10", label: "Bahçe 10" }
+      ],
+      events: [
+        {
+          start: "2020-11-03 10:30",
+          end: "2020-11-03 12:00",
+          title: "Doctor appointment",
+          class: "health",
+          split: 1,
+          sessionId: 1
+        },
+        {
+          start: "2020-11-03 12:00",
+          end: "2020-11-03 12:15",
+          title: "ARA",
+          class: "lunch",
+          background: true,
+          split: 1
+        }
+      ]
     };
   },
   mounted() {
@@ -560,7 +360,74 @@ export default {
         icon: "success",
         confirmButtonClass: "btn btn-secondary"
       });
+    },
+    Clicklendin(event) {
+      console.log(event);
+      debugger;
+    },
+    ViewClicked(event) {
+      console.log(event);
+      debugger;
+    },
+    onChangeDate() {
+      this.showCalendar = true;
     }
   }
 };
 </script>
+
+<style>
+.vuecal__cell-split.salon1,
+.vuecal__cell-split.bahce5 {
+  background-color: rgba(221, 238, 255, 0.5);
+}
+.vuecal__cell-split.salon2,
+.vuecal__cell-split.bahce7 {
+  background-color: rgba(255, 232, 251, 0.5);
+}
+.vuecal__cell-split.salon3,
+.vuecal__cell-split.bahce8 {
+  background-color: rgba(221, 255, 239, 0.5);
+}
+.vuecal__cell-split.salon4,
+.vuecal__cell-split.bahce10 {
+  background-color: rgba(255, 250, 196, 0.5);
+}
+.vuecal__cell-split .split-label {
+  color: rgba(0, 0, 0, 0.1);
+  font-size: 26px;
+}
+
+/* Different color for different event types. */
+.vuecal__event.leisure {
+  background-color: rgba(253, 156, 66, 0.9);
+  border: 1px solid rgb(233, 136, 46);
+  color: #fff;
+}
+.vuecal__event.health {
+  background-color: rgba(164, 230, 210, 0.9);
+  border: 1px solid rgb(144, 210, 190);
+}
+.vuecal__event.sport {
+  background-color: rgba(255, 102, 102, 0.9);
+  border: 1px solid rgb(235, 82, 82);
+  color: #fff;
+}
+.vuecal__event.lunch {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    #d6d6d6 10px,
+    #d6d6d6 20px
+  );
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vuecal__event.lunch .vuecal__event-time {
+  display: none;
+  align-items: center;
+}
+</style>
