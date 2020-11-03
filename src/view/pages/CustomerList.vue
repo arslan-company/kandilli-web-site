@@ -236,7 +236,6 @@
 </template>
 
 <script>
-// const axios = require("axios").default;
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 
 export default {
@@ -392,34 +391,6 @@ export default {
     };
   },
   methods: {
-    // handleClick(item) {
-    //   axios({
-    //     method: "get",
-    //     url: this.getTasksUrl
-    //   }).then(() => {
-    //     this.$router.push({
-    //       name: item["task-proc-def-id"],
-    //       params: {
-    //         url:
-    //           "http://insecure-ahmet-dev-rhpam-kieserver-ahmet-rhpam.efes-roks-cls01-8d096ac4a14f7747edefd138d2db7a24-0000.eu-de.containers.appdomain.cloud/services/rest/server/containers/" +
-    //           item["task-container-id"] +
-    //           "/tasks/" +
-    //           item["task-id"] +
-    //           "/states/completed?auto-progress=true",
-    //         isUpdate: false,
-    //         processInstanceId: item["task-proc-inst-id"],
-    //         deleteURL:
-    //           this.url +
-    //           item.containeralias +
-    //           "/processes/instances/" +
-    //           item["task-proc-inst-id"],
-    //         isCreatedByMe: false,
-    //         body: this.body,
-    //         menuName: "MENU.REVISED_PENDING"
-    //       }
-    //     });
-    //   });
-    // },
     getColor(item) {
       const temp = Math.floor(Math.random() * 5) + 1;
       switch (temp) {

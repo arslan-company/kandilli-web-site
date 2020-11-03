@@ -110,7 +110,7 @@
                       class="mb-8"
                       :min="min"
                       placeholder=""
-                      @input="onChangeDate"
+                      @input="onSelectedDayPart"
                     ></b-form-datepicker>
                   </b-col>
                   <b-col>
@@ -119,14 +119,15 @@
                         id="dayPart"
                         v-model="reservation.dayPart"
                         :options="dayPartList"
+                        @change="onSelectedDayPart"
                       ></b-form-select>
                     </b-form-group>
                   </b-col>
                 </b-row>
                 <vue-cal
                   :selected-date="reservation.date"
-                  :time-from="9 * 60"
-                  :time-to="20 * 60"
+                  :time-from="calendarTimeStart"
+                  :time-to="calendarTimeEnd"
                   :time-step="90"
                   :disable-views="['years', 'year', 'month', 'week']"
                   :events="events"
@@ -134,7 +135,6 @@
                   :hidden="!showCalendar"
                   @event-focus="Clicklendin($event)"
                   @view-change="ViewClicked($event)"
-                  today-button
                   sticky-split-labels
                   hide-view-selector
                   active-view="day"
@@ -261,6 +261,7 @@ import Swal from "sweetalert2";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/tr.js";
+const axios = require("axios").default;
 
 export default {
   name: "CreateReservation",
@@ -271,6 +272,8 @@ export default {
     const minDate = new Date(today);
     return {
       showCalendar: false,
+      calendarTimeStart: 0,
+      calendarTimeEnd: 0,
       reservation: {
         date: "",
         dayPart: "",
@@ -299,33 +302,15 @@ export default {
         }
       ],
       min: minDate,
-      splitDays: [
-        { id: 1, class: "salon1", label: "Salon 1" },
-        { id: 2, class: "salon2", label: "Salon 2" },
-        { id: 3, class: "salon3", label: "Salon 3" },
-        { id: 4, class: "salon4", label: "Salon 4" },
-        { id: 5, class: "bahce5", label: "Bahçe 5" },
-        { id: 6, class: "bahce7", label: "Bahçe 7" },
-        { id: 7, class: "bahce8", label: "Bahçe 8" },
-        { id: 8, class: "bahce10", label: "Bahçe 10" }
-      ],
+      splitDays: [],
       events: [
-        {
-          start: "2020-11-03 10:30",
-          end: "2020-11-03 12:00",
-          title: "Doctor appointment",
-          class: "health",
-          split: 1,
-          sessionId: 1
-        },
-        {
-          start: "2020-11-03 12:00",
-          end: "2020-11-03 12:15",
-          title: "ARA",
-          class: "lunch",
-          background: true,
-          split: 1
-        }
+        // {
+        //   start: "2020-11-03 12:30",
+        //   end: "2020-11-03 12:45",
+        //   title: "ARA",
+        //   class: "lunch",
+        //   split: 1
+        // }
       ]
     };
   },
@@ -350,6 +335,20 @@ export default {
         KTUtil.scrollTop();
       }, 500);
     });
+
+    axios({
+      method: "get",
+      url: "https://kandilliservices.herokuapp.com/GetTableList"
+    }).then(result => {
+      if (result.data.data.length > 0) {
+        result.data.data.forEach(el => {
+          this.splitDays.push({
+            id: el.TablesId,
+            label: el.TableLocation + " - " + el.TableNumber
+          });
+        });
+      }
+    });
   },
   methods: {
     submit: function(e) {
@@ -361,57 +360,88 @@ export default {
         confirmButtonClass: "btn btn-secondary"
       });
     },
-    Clicklendin(event) {
-      console.log(event);
-      debugger;
+    Clicklendin() {
+      // console.log(event);
+      // debugger;
     },
-    ViewClicked(event) {
-      console.log(event);
-      debugger;
+    ViewClicked() {
+      // console.log(event);
+      // debugger;
     },
-    onChangeDate() {
-      this.showCalendar = true;
+    onSelectedDayPart() {
+      if (this.reservation.date !== "" && this.reservation.dayPart !== "") {
+        axios({
+          method: "post",
+          url:
+            "https://kandilliservices.herokuapp.com/GetAppointmentFixtureByDate",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            data: {
+              Day: this.reservation.date,
+              DayPartId: this.reservation.dayPart
+            }
+          }
+        }).then(res => {
+          this.events = [];
+          if (res.data.data.cellList.length > 0) {
+            this.calendarTimeStart = res.data.data.timeFrom;
+            this.calendarTimeEnd = res.data.data.timeTo;
+            res.data.data.cellList.forEach(el => {
+              this.events.push({
+                start: el.Day + " " + el.SessionStart,
+                end: el.Day + " " + el.SessionEnd,
+                title: el.FullName,
+                split: el.TablesId,
+                sessionId: el.SessionId,
+                class: ""
+              });
+              this.events.forEach(element => {
+                if (el.CustomerId === null) {
+                  element.class = "available";
+                } else {
+                  element.class = "full";
+                }
+              });
+            });
+            this.showCalendar = true;
+          }
+        });
+      }
     }
   }
 };
 </script>
 
 <style>
-.vuecal__cell-split.salon1,
-.vuecal__cell-split.bahce5 {
-  background-color: rgba(221, 238, 255, 0.5);
-}
-.vuecal__cell-split.salon2,
-.vuecal__cell-split.bahce7 {
-  background-color: rgba(255, 232, 251, 0.5);
-}
-.vuecal__cell-split.salon3,
-.vuecal__cell-split.bahce8 {
-  background-color: rgba(221, 255, 239, 0.5);
-}
-.vuecal__cell-split.salon4,
-.vuecal__cell-split.bahce10 {
-  background-color: rgba(255, 250, 196, 0.5);
-}
 .vuecal__cell-split .split-label {
   color: rgba(0, 0, 0, 0.1);
   font-size: 26px;
 }
-
-/* Different color for different event types. */
-.vuecal__event.leisure {
-  background-color: rgba(253, 156, 66, 0.9);
-  border: 1px solid rgb(233, 136, 46);
-  color: #fff;
+.vuecal__event-title {
+  font-size: 12px;
 }
-.vuecal__event.health {
+
+.vuecal__event.full {
+  background-color: rgba(255, 0, 0);
+  border: 1px solid rgb(255, 0, 0);
+  border-right: 2px solid black;
+  color: #fff;
+  cursor: pointer;
+}
+.vuecal__event.available {
   background-color: rgba(164, 230, 210, 0.9);
   border: 1px solid rgb(144, 210, 190);
+  border-right: 2px solid black;
+  cursor: pointer;
 }
-.vuecal__event.sport {
-  background-color: rgba(255, 102, 102, 0.9);
-  border: 1px solid rgb(235, 82, 82);
+.vuecal__event.past {
+  background-color: rgba(83, 83, 83);
+  border: 1px solid rgb(83, 83, 83);
+  border-right: 2px solid black;
   color: #fff;
+  cursor: pointer;
 }
 .vuecal__event.lunch {
   background: repeating-linear-gradient(
@@ -425,8 +455,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-right: 2px solid black;
 }
-.vuecal__event.lunch .vuecal__event-time {
+.vuecal__event.lunch .vuecal__event-time,
+.vuecal__event-time {
   display: none;
   align-items: center;
 }
