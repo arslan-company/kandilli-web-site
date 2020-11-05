@@ -58,13 +58,10 @@
                 </h3>
                 <b-row>
                   <b-col>
-                    <b-form-group
-                      label="Telefon Numarası"
-                      label-for="phoneNumber"
-                    >
+                    <b-form-group label="Telefon Numarası" label-for="Phone">
                       <b-form-input
-                        id="phoneNumber"
-                        v-model="user.phoneNumber"
+                        id="Phone"
+                        v-model="Customer.Phone"
                         type="text"
                         placeholder="Örnek: 05555555555"
                       ></b-form-input>
@@ -73,10 +70,10 @@
                 </b-row>
                 <b-row>
                   <b-col>
-                    <b-form-group label="Müşteri Adı" label-for="firstName">
+                    <b-form-group label="Müşteri Adı" label-for="FirstName">
                       <b-form-input
-                        id="firstName"
-                        v-model="user.firstName"
+                        id="FirstName"
+                        v-model="Customer.FirstName"
                         type="text"
                       ></b-form-input>
                     </b-form-group>
@@ -84,10 +81,10 @@
                 </b-row>
                 <b-row>
                   <b-col>
-                    <b-form-group label="Müşteri Soyadı" label-for="lastName">
+                    <b-form-group label="Müşteri Soyadı" label-for="LastName">
                       <b-form-input
-                        id="lastName"
-                        v-model="user.lastName"
+                        id="LastName"
+                        v-model="Customer.LastName"
                         type="text"
                       ></b-form-input>
                     </b-form-group>
@@ -103,10 +100,10 @@
                 </h4>
                 <b-row>
                   <b-col>
-                    <label for="date">Tarih</label>
+                    <label for="Day">Tarih</label>
                     <b-form-datepicker
-                      id="date"
-                      v-model="reservation.date"
+                      id="Day"
+                      v-model="Appointment.Day"
                       class="mb-8"
                       :min="min"
                       placeholder=""
@@ -117,7 +114,7 @@
                     <b-form-group label="Gün Bölümü" label-for="dayPart">
                       <b-form-select
                         id="dayPart"
-                        v-model="reservation.dayPart"
+                        v-model="dayPart"
                         :options="dayPartList"
                         @change="onSelectedDayPart"
                       ></b-form-select>
@@ -125,7 +122,7 @@
                   </b-col>
                 </b-row>
                 <vue-cal
-                  :selected-date="reservation.date"
+                  :selected-date="Appointment.Day"
                   :time-from="calendarTimeStart"
                   :time-to="calendarTimeEnd"
                   :time-step="90"
@@ -133,6 +130,7 @@
                   :events="events"
                   :split-days="splitDays"
                   :hidden="!showCalendar"
+                  :timeCellHeight="timeCellHeight"
                   @event-focus="Clicklendin($event)"
                   @view-change="ViewClicked($event)"
                   sticky-split-labels
@@ -144,19 +142,19 @@
                 </vue-cal>
                 <b-row>
                   <b-col>
-                    <b-form-group label="Kişi Sayısı" label-for="customerCount">
+                    <b-form-group label="Kişi Sayısı" label-for="PersonCount">
                       <b-form-input
-                        id="customerCount"
-                        v-model="reservation.customerCount"
+                        id="PersonCount"
+                        v-model="Appointment.PersonCount"
                         type="number"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col>
-                    <b-form-group label="Müşteri Email" label-for="email">
+                    <b-form-group label="Müşteri Email" label-for="Mail">
                       <b-form-input
-                        id="email"
-                        v-model="user.email"
+                        id="Mail"
+                        v-model="Customer.Mail"
                         type="email"
                       ></b-form-input>
                     </b-form-group>
@@ -175,10 +173,11 @@
                     Müşteri Bilgileri:
                   </div>
                   <div class="line-height-md">
-                    İsim Soyisim: {{ user.firstName + " " + user.lastName }}
+                    İsim Soyisim:
+                    {{ Customer.FirstName + " " + Customer.LastName }}
                     <br />
-                    Telefon Numarası: {{ user.phoneNumber }} <br />
-                    Email: {{ user.email }}
+                    Telefon Numarası: {{ Customer.Phone }} <br />
+                    Email: {{ Customer.Mail }}
                   </div>
                 </div>
                 <div class="border-bottom mb-5 pb-5">
@@ -186,10 +185,10 @@
                     Rezervasyon Bilgileri
                   </div>
                   <div class="line-height-md">
-                    Tarih: {{ reservation.date }} <br />
-                    Gün Bölümü: {{ reservation.dayPart }} <br />
-                    Session: {{ reservation.session }} <br />
-                    Kişi Sayısı: {{ reservation.customerCount }}
+                    Tarih: {{ Appointment.Day }} <br />
+                    Gün Bölümü: {{ dayPart }} <br />
+                    Seans: {{ seansTime }} <br />
+                    Kişi Sayısı: {{ Appointment.PersonCount }}
                   </div>
                 </div>
                 <div class="mb-5">
@@ -197,11 +196,11 @@
                     <b-col>
                       <b-form-group
                         label="Müşteri Notu"
-                        label-for="customerNote"
+                        label-for="Description"
                       >
                         <b-form-textarea
-                          id="customerNote"
-                          v-model="reservation.customerNote"
+                          id="Description"
+                          v-model="Appointment.Description"
                           type="text"
                         ></b-form-textarea>
                       </b-form-group>
@@ -271,21 +270,24 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
+      timeCellHeight: 60,
       showCalendar: false,
       calendarTimeStart: 0,
       calendarTimeEnd: 0,
-      reservation: {
-        date: "",
-        dayPart: "",
-        session: "",
-        customerCount: "",
-        customerNote: ""
+      dayPart: "",
+      seansTime: "",
+      Customer: {
+        FirstName: "",
+        LastName: "",
+        Phone: "",
+        Mail: ""
       },
-      user: {
-        phoneNumber: "",
-        firstName: "",
-        lastName: "",
-        email: ""
+      Appointment: {
+        SessionId: 0,
+        TablesId: 0,
+        Day: "",
+        PersonCount: 0,
+        Description: ""
       },
       dayPartList: [
         {
@@ -303,15 +305,7 @@ export default {
       ],
       min: minDate,
       splitDays: [],
-      events: [
-        // {
-        //   start: "2020-11-03 12:30",
-        //   end: "2020-11-03 12:45",
-        //   title: "ARA",
-        //   class: "lunch",
-        //   split: 1
-        // }
-      ]
+      events: []
     };
   },
   mounted() {
@@ -351,25 +345,44 @@ export default {
     });
   },
   methods: {
-    submit: function(e) {
-      e.preventDefault();
-      Swal.fire({
-        title: "",
-        text: "The application has been successfully submitted!",
-        icon: "success",
-        confirmButtonClass: "btn btn-secondary"
+    submit: function() {
+      axios({
+        method: "post",
+        url: "https://kandilliservices.herokuapp.com/AddAppointment",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: {
+          data: {
+            Customer: this.Customer,
+            Appointment: this.Appointment
+          }
+        }
+      }).then(res => {
+        console.log(res);
+        debugger;
+        Swal.fire({
+          title: "",
+          text: "The application has been successfully submitted!",
+          icon: "success"
+        });
       });
     },
-    Clicklendin() {
-      // console.log(event);
-      // debugger;
+    Clicklendin(event) {
+      if (event.class === "available") {
+        this.Appointment.SessionId = event.sessionId;
+        this.Appointment.TablesId = event.split;
+        this.seansTime = event.startTime + " - " + event.endTime;
+      } else if (event.class === "full") {
+        // yedek listeye kayıt olma ve müşteriye haber verilmesi için uyarı çıkarılması.
+      }
     },
-    ViewClicked() {
-      // console.log(event);
-      // debugger;
+    ViewClicked(event) {
+      console.log(event);
+      debugger;
     },
     onSelectedDayPart() {
-      if (this.reservation.date !== "" && this.reservation.dayPart !== "") {
+      if (this.Appointment.Day !== "" && this.dayPart !== "") {
         axios({
           method: "post",
           url:
@@ -379,8 +392,8 @@ export default {
           },
           data: {
             data: {
-              Day: this.reservation.date,
-              DayPartId: this.reservation.dayPart
+              Day: this.Appointment.Day,
+              DayPartId: this.dayPart
             }
           }
         }).then(res => {
@@ -389,20 +402,32 @@ export default {
             this.calendarTimeStart = res.data.data.timeFrom;
             this.calendarTimeEnd = res.data.data.timeTo;
             res.data.data.cellList.forEach(el => {
+              let sessionClass = "available";
+              let title = "";
+              console.log(el.PersonCount);
+              debugger;
+              if (
+                el.FullName !== "" &&
+                el.Phone !== 0 &&
+                el.PersonCount !== null
+              ) {
+                title =
+                  el.FullName + " " + el.Phone + " (" + el.PersonCount + ")";
+              }
+              if (el.IsBreakTime === 1) {
+                sessionClass = "lunch";
+              } else if (el.CustomerId !== null) {
+                sessionClass = "full";
+              }
               this.events.push({
                 start: el.Day + " " + el.SessionStart,
                 end: el.Day + " " + el.SessionEnd,
-                title: el.FullName,
+                title: title,
                 split: el.TablesId,
                 sessionId: el.SessionId,
-                class: ""
-              });
-              this.events.forEach(element => {
-                if (el.CustomerId === null) {
-                  element.class = "available";
-                } else {
-                  element.class = "full";
-                }
+                class: sessionClass,
+                startTime: el.SessionStart,
+                endTime: el.SessionEnd
               });
             });
             this.showCalendar = true;
