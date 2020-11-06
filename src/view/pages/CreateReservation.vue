@@ -64,6 +64,7 @@
                         v-model="Customer.Phone"
                         type="text"
                         placeholder="Örnek: 05555555555"
+                        @change="onChangePhone"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -359,8 +360,6 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
-        debugger;
         Swal.fire({
           title: "",
           text: "The application has been successfully submitted!",
@@ -404,8 +403,6 @@ export default {
             res.data.data.cellList.forEach(el => {
               let sessionClass = "available";
               let title = "";
-              console.log(el.PersonCount);
-              debugger;
               if (
                 el.FullName !== "" &&
                 el.Phone !== 0 &&
@@ -431,6 +428,26 @@ export default {
               });
             });
             this.showCalendar = true;
+          }
+        });
+      }
+    },
+    onChangePhone() {
+      if (this.Customer.Phone.length === 11) {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/CheckCustomer",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            data: {
+              Phone: this.Customer.Phone
+            }
+          }
+        }).then(res => {
+          if (res.data.data !== null) {
+            this.Customer = res.data.data.customer;
           }
         });
       }
