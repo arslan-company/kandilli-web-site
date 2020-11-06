@@ -288,7 +288,8 @@ export default {
         TablesId: 0,
         Day: "",
         PersonCount: 0,
-        Description: ""
+        Description: "",
+        IsReserved: 0
       },
       dayPartList: [
         {
@@ -359,7 +360,7 @@ export default {
             Appointment: this.Appointment
           }
         }
-      }).then(res => {
+      }).then(() => {
         Swal.fire({
           title: "",
           text: "The application has been successfully submitted!",
@@ -373,7 +374,25 @@ export default {
         this.Appointment.TablesId = event.split;
         this.seansTime = event.startTime + " - " + event.endTime;
       } else if (event.class === "full") {
-        // yedek listeye kayıt olma ve müşteriye haber verilmesi için uyarı çıkarılması.
+        this.showModal(event.backupCount);
+      }
+    },
+    async showModal(backupCount) {
+      const value = await this.$bvModal.msgBoxConfirm(
+        "Seçilen seans aralığında " +
+          backupCount +
+          " kişi yedek listesindedir. İşlemi onaylıyor musunuz?",
+        {
+          title: "Seans dolu olduğu için yedek listeye kayıt edilecektir.",
+          okTitle: "Onay",
+          cancelTitle: "İptal",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        }
+      );
+      if (value) {
+        this.Appointment.IsReserved = 1;
       }
     },
     ViewClicked(event) {
@@ -424,7 +443,8 @@ export default {
                 sessionId: el.SessionId,
                 class: sessionClass,
                 startTime: el.SessionStart,
-                endTime: el.SessionEnd
+                endTime: el.SessionEnd,
+                backupCount: el.BackupCount
               });
             });
             this.showCalendar = true;
