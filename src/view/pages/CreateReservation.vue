@@ -135,6 +135,7 @@
                   @event-focus="Clicklendin($event)"
                   @view-change="ViewClicked($event)"
                   sticky-split-labels
+                  today-button
                   hide-view-selector
                   active-view="day"
                   style="margin-bottom:3%;"
@@ -262,6 +263,7 @@ import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/tr.js";
 const axios = require("axios").default;
+import moment from "moment";
 
 export default {
   name: "CreateReservation",
@@ -289,7 +291,7 @@ export default {
         Day: "",
         PersonCount: 0,
         Description: "",
-        IsReserved: 0
+        IsBackup: 0
       },
       dayPartList: [
         {
@@ -392,12 +394,12 @@ export default {
         }
       );
       if (value) {
-        this.Appointment.IsReserved = 1;
+        this.Appointment.IsBackup = 1;
       }
     },
     ViewClicked(event) {
-      console.log(event);
-      debugger;
+      this.Appointment.Day = moment(event.startDate).format("YYYY-MM-DD");
+      this.onSelectedDayPart();
     },
     onSelectedDayPart() {
       if (this.Appointment.Day !== "" && this.dayPart !== "") {
@@ -435,6 +437,9 @@ export default {
               } else if (el.CustomerId !== null) {
                 sessionClass = "full";
               }
+              console.log(el.SessionStart);
+              console.log(this.min);
+              debugger;
               this.events.push({
                 start: el.Day + " " + el.SessionStart,
                 end: el.Day + " " + el.SessionEnd,
@@ -484,7 +489,6 @@ export default {
 .vuecal__event-title {
   font-size: 12px;
 }
-
 .vuecal__event.full {
   background-color: rgba(255, 0, 0);
   border: 1px solid rgb(255, 0, 0);
