@@ -29,9 +29,6 @@ window.KTScrolltop = KTScrolltop;
 import KTToggle from "@/assets/js/components/toggle.js";
 window.KTToggle = KTToggle;
 
-import KTWizard from "@/assets/js/components/wizard.js";
-window.KTWizard = KTWizard;
-
 // Metronic layout base js
 import KTLayoutAside from "@/assets/js/layout/base/aside.js";
 window.KTLayoutAside = KTLayoutAside;
