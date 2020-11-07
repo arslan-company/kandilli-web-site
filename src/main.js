@@ -27,7 +27,6 @@ import "@/core/plugins/highlight-js";
 import "@/core/plugins/inline-svg";
 import "@/core/plugins/apexcharts";
 import "@/core/plugins/metronic";
-import "@/core/plugins/treeselect";
 import "@mdi/font/css/materialdesignicons.css";
 
 // API service init

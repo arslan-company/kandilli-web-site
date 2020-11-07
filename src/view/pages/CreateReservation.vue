@@ -437,9 +437,6 @@ export default {
               } else if (el.CustomerId !== null) {
                 sessionClass = "full";
               }
-              console.log(el.SessionStart);
-              console.log(this.min);
-              debugger;
               this.events.push({
                 start: el.Day + " " + el.SessionStart,
                 end: el.Day + " " + el.SessionEnd,
