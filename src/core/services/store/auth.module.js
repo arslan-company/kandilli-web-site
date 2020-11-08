@@ -5,7 +5,6 @@ import JwtService from "@/core/services/jwt.service";
 export const VERIFY_AUTH = "verifyAuth";
 export const LOGIN = "login";
 export const LOGOUT = "logout";
-export const REGISTER = "register";
 export const UPDATE_PASSWORD = "updateUser";
 
 // mutation types
@@ -32,7 +31,7 @@ const getters = {
 const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
-      ApiService.post("login", credentials)
+      ApiService.post("Login", credentials)
         .then(({ data }) => {
           // console.log("Here what post returns", data);
           context.commit(SET_AUTH, data);
@@ -45,18 +44,6 @@ const actions = {
   },
   [LOGOUT](context) {
     context.commit(PURGE_AUTH);
-  },
-  [REGISTER](context, credentials) {
-    return new Promise(resolve => {
-      ApiService.post("login", credentials)
-        .then(({ data }) => {
-          context.commit(SET_AUTH, data);
-          resolve(data);
-        })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
-        });
-    });
   },
   [VERIFY_AUTH](context) {
     if (JwtService.getToken()) {

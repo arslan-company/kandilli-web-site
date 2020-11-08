@@ -58,7 +58,7 @@
               </div>
               <div class="form-group">
                 <label class="font-size-h6 font-weight-bolder text-dark"
-                  >Email</label
+                  >Kullanıcı Adı</label
                 >
                 <div
                   id="example-input-group-1"
@@ -68,9 +68,9 @@
                   <input
                     class="form-control form-control-solid h-auto py-7 px-6 rounded-lg"
                     type="text"
-                    name="email"
-                    ref="email"
-                    :value="form.email"
+                    name="username"
+                    ref="username"
+                    :value="form.Username"
                   />
                 </div>
               </div>
@@ -96,7 +96,7 @@
                     type="password"
                     name="password"
                     ref="password"
-                    :value="form.password"
+                    :value="form.Password"
                     autocomplete="off"
                   />
                 </div>
@@ -182,7 +182,7 @@ import SubmitButton from "@/assets/plugins/formvalidation/dist/es6/plugins/Submi
 
 import KTUtil from "@/assets/js/components/util";
 import { mapGetters, mapState } from "vuex";
-import { LOGIN, LOGOUT, REGISTER } from "@/core/services/store/auth.module";
+import { LOGIN, LOGOUT } from "@/core/services/store/auth.module";
 import Swal from "sweetalert2";
 
 export default {
@@ -192,8 +192,8 @@ export default {
       state: "signin",
       // Remove this dummy login info
       form: {
-        email: "admin@demo.com",
-        password: "demo"
+        Username: "calisan",
+        Password: "12345"
       }
     };
   },
@@ -209,12 +209,11 @@ export default {
   },
   mounted() {
     const signin_form = KTUtil.getById("kt_login_signin_form");
-    const signup_form = KTUtil.getById("kt_login_signup_form");
     const forgot_form = KTUtil.getById("kt_login_forgot_form");
 
     this.fv = formValidation(signin_form, {
       fields: {
-        email: {
+        username: {
           validators: {
             notEmpty: {
               message: "Username is required"
@@ -225,60 +224,6 @@ export default {
           validators: {
             notEmpty: {
               message: "Password is required"
-            }
-          }
-        }
-      },
-      plugins: {
-        trigger: new Trigger(),
-        submitButton: new SubmitButton(),
-        bootstrap: new Bootstrap()
-      }
-    });
-
-    this.fv1 = formValidation(signup_form, {
-      fields: {
-        fullname: {
-          validators: {
-            notEmpty: {
-              message: "Full name is required"
-            }
-          }
-        },
-        email: {
-          validators: {
-            notEmpty: {
-              message: "Email is required"
-            },
-            emailAddress: {
-              message: "The value is not a valid email address"
-            }
-          }
-        },
-        password: {
-          validators: {
-            notEmpty: {
-              message: "Password is required"
-            }
-          }
-        },
-        cpassword: {
-          validators: {
-            notEmpty: {
-              message: "Confirm password is required"
-            },
-            identical: {
-              compare: function() {
-                return signup_form.querySelector('[name="password"]').value;
-              },
-              message: "The password and its confirm are not the same"
-            }
-          }
-        },
-        agree: {
-          validators: {
-            notEmpty: {
-              message: "You should agree terms and conditions"
             }
           }
         }
@@ -324,8 +269,8 @@ export default {
       this.fv.validate();
 
       this.fv.on("core.form.valid", () => {
-        var email = this.form.email;
-        var password = this.form.password;
+        const Username = this.form.Username;
+        const Password = this.form.Password;
 
         // clear existing errors
         this.$store.dispatch(LOGOUT);
@@ -338,7 +283,7 @@ export default {
         setTimeout(() => {
           // send login request
           this.$store
-            .dispatch(LOGIN, { email, password })
+            .dispatch(LOGIN, { Username, Password })
             // go to which page after successfully login
             .then(() => this.$router.push({ name: "dashboard" }))
             .catch(() => {});
@@ -352,49 +297,6 @@ export default {
       });
 
       this.fv.on("core.form.invalid", () => {
-        Swal.fire({
-          title: "",
-          text: "Please, provide correct data!",
-          icon: "error",
-          confirmButtonClass: "btn btn-secondary",
-          heightAuto: false
-        });
-      });
-    },
-
-    onSubmitRegister() {
-      this.fv1.validate();
-
-      this.fv1.on("core.form.valid", () => {
-        const email = this.$refs.remail.value;
-        const password = this.$refs.rpassword.value;
-
-        // clear existing errors
-        this.$store.dispatch(LOGOUT);
-
-        // set spinner to submit button
-        const submitButton = this.$refs["kt_login_signup_submit"];
-        submitButton.classList.add("spinner", "spinner-light", "spinner-right");
-
-        // dummy delay
-        setTimeout(() => {
-          // send register request
-          this.$store
-            .dispatch(REGISTER, {
-              email: email,
-              password: password
-            })
-            .then(() => this.$router.push({ name: "dashboard" }));
-
-          submitButton.classList.remove(
-            "spinner",
-            "spinner-light",
-            "spinner-right"
-          );
-        }, 2000);
-      });
-
-      this.fv1.on("core.form.invalid", () => {
         Swal.fire({
           title: "",
           text: "Please, provide correct data!",
