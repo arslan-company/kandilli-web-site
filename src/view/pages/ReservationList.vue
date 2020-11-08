@@ -9,7 +9,6 @@
               id="Day"
               v-model="choosenDay"
               class="mb-8"
-              @input="getDayEvents"
             ></b-form-datepicker>
           </b-col>
           <b-col></b-col>
@@ -24,6 +23,7 @@
           :split-days="splitDays"
           :timeCellHeight="timeCellHeight"
           @view-change="ViewClicked($event)"
+          @event-focus="Clicklendin($event)"
           sticky-split-labels
           today-button
           hide-view-selector
@@ -31,6 +31,132 @@
           locale="tr"
         >
         </vue-cal>
+        <b-modal v-model="showAppointmentModal" size="xl" :title="modalTitle">
+          <b-container fluid>
+            <div :hidden="!backupActionsDisable">
+              <h4>Randevu Hak Sahibi</h4>
+              <hr />
+              <table
+                role="table"
+                aria-busy="false"
+                aria-colcount="10"
+                class="table b-table table-striped table-bordered b-table-fixed"
+              >
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th role="columnheader" scope="col" aria-colindex="1">
+                      <div>İsim Soyisim</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="2">
+                      <div>Telefon Numarası</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="3">
+                      <div>Kişi Sayısı</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="4">
+                      <div>İşlem</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody role="rowgroup">
+                  <tr
+                    role="row"
+                    v-for="(item, index) in appointmentInfo"
+                    :key="index"
+                  >
+                    <td aria-colindex="1" role="cell">
+                      {{ item.event.fullName }}
+                    </td>
+                    <td aria-colindex="2" role="cell">
+                      {{ item.event.phone }}
+                    </td>
+                    <td aria-colindex="3" role="cell">
+                      {{ item.event.personCount }}
+                    </td>
+                    <td aria-colindex="3" role="cell">
+                      <b-button
+                        variant="outline-danger"
+                        @click="onCancelAppointment(item, 0)"
+                        size="sm"
+                      >
+                        <i class="far fa-trash-alt"></i> Randevu İptali
+                      </b-button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <b-alert variant="warning" :show="!backupActionsDisable">
+              Randevu hak sahibini belirlemek için Yedek listesinden arama
+              yapılarak onay alınmalıdır.
+            </b-alert>
+            <div :hidden="!showBackupList">
+              <h4>Yedek Listesi</h4>
+              <hr />
+              <table
+                role="table"
+                aria-busy="false"
+                aria-colcount="10"
+                class="table b-table table-striped table-bordered b-table-fixed"
+              >
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th role="columnheader" scope="col" aria-colindex="1">
+                      <div>İsim Soyisim</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="2">
+                      <div>Telefon Numarası</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="3">
+                      <div>Kişi Sayısı</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="4">
+                      <div>Randevu İşlemi</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody role="rowgroup">
+                  <tr
+                    role="row"
+                    v-for="(item, index) in backupList"
+                    :key="index"
+                  >
+                    <td aria-colindex="1" role="cell">
+                      {{ item.FullName }}
+                    </td>
+                    <td aria-colindex="2" role="cell">
+                      {{ item.Phone }}
+                    </td>
+                    <td aria-colindex="3" role="cell">
+                      {{ item.PersonCount }}
+                    </td>
+                    <td aria-colindex="3" role="cell">
+                      <b-button
+                        variant="outline-success"
+                        @click="onAcceptAppointment(item)"
+                        :disabled="backupActionsDisable"
+                      >
+                        Onay
+                      </b-button>
+                      <b-button
+                        variant="outline-danger"
+                        @click="onCancelAppointment(item, 1)"
+                        :disabled="backupActionsDisable"
+                        style="margin-left:2%"
+                      >
+                        Red
+                      </b-button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </b-container>
+
+          <template v-slot:modal-footer>
+            <div class="w-100"></div>
+          </template>
+        </b-modal>
       </div>
     </div>
   </div>
@@ -51,7 +177,6 @@ export default {
   data() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const time = today.getHours() + ":" + today.getMinutes();
     return {
       timeCellHeight: 60,
       choosenDay: moment(today).format("YYYY-MM-DD"),
@@ -59,13 +184,162 @@ export default {
       events: [],
       calendarTimeStart: 0,
       calendarTimeEnd: 0,
-      currentTime: time
+      showAppointmentModal: false,
+      modalTitle: "",
+      appointmentInfo: [],
+      backupList: [],
+      backupActionsDisable: true,
+      showBackupList: false
     };
   },
   methods: {
+    Clicklendin(event) {
+      console.log(event);
+      debugger;
+      this.appointmentInfo = [];
+      this.backupList = [];
+      if (event.fullName !== null || event.backupList.length > 0) {
+        this.appointmentInfo.push({
+          event
+        });
+        this.showAppointmentModal = true;
+        this.modalTitle =
+          event.tableInfo +
+          "/" +
+          event.startTime +
+          "-" +
+          event.endTime +
+          " Randevu Detay Bilgileri";
+        if (event.backupList.length > 0) {
+          this.backupList = event.backupList;
+          this.showBackupList = true;
+        }
+      } else {
+        this.$bvToast.toast(
+          "Seçtiğiniz randevunun detay bilgisi bulunmamaktadır.",
+          {
+            title: "Bilgilendirme",
+            variant: "info",
+            toaster: "b-toaster-top-center",
+            solid: true
+          }
+        );
+      }
+    },
+    async onCancelAppointment(item, IsBackup) {
+      let body = {};
+      if (IsBackup === 1) {
+        body = {
+          IsBackup: IsBackup,
+          CustomerId: item.CustomerId,
+          SessionId: item.SessionId,
+          TablesId: item.TablesId,
+          Day: moment(item.Day).format("YYYY-MM-DD")
+        };
+      } else {
+        body = {
+          IsBackup: IsBackup,
+          CustomerId: item.event.customerId,
+          SessionId: item.event.sessionId,
+          TablesId: item.event.tablesId,
+          Day: item.event.day
+        };
+      }
+      if (await this.showModal("Randevu iptali gerçekleştirilecektir.")) {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/CancelAppointment",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: body
+        }).then(res => {
+          if (res.data.code === 1) {
+            this.$bvToast.toast("Randevu iptali işlemi başarılı olmuştur.", {
+              title: "Bilgilendirme",
+              variant: "info",
+              toaster: "b-toaster-top-center",
+              solid: true
+            });
+            this.backupActionsDisable = false;
+            if (res.data.data !== null && res.data.data.length > 0) {
+              this.backupList = res.data.data;
+            }
+          } else {
+            this.$bvToast.toast("Randevu iptali işlemi başarısız olmuştur.", {
+              title: "Hata",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              solid: true
+            });
+          }
+        });
+      }
+    },
+    async onAcceptAppointment(item) {
+      if (await this.showModal("Randevu onayı gerçekleştirilecektir.")) {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/AddAppointment",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            data: {
+              Customer: {
+                FirstName: item.FirstName,
+                LastName: item.LastName,
+                Phone: item.Phone,
+                Mail: item.Mail
+              },
+              Appointment: {
+                IsBackup: 0,
+                SessionId: item.SessionId,
+                TablesId: item.TablesId,
+                Day: moment(item.Day).format("YYYY-MM-DD"),
+                PersonCount: item.PersonCount,
+                Description: item.Description
+              }
+            }
+          }
+        }).then(res => {
+          if (res.data.code === 1) {
+            this.$bvToast.toast("Randevu onayı işlemi başarılı olmuştur.", {
+              title: "Bilgilendirme",
+              variant: "info",
+              toaster: "b-toaster-top-center",
+              solid: true
+            });
+            this.showAppointmentModal = false;
+            this.getDayEvents();
+          } else {
+            this.$bvToast.toast("Randevu onayı işlemi başarısız olmuştur.", {
+              title: "Hata",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              solid: true
+            });
+          }
+        });
+      }
+    },
     ViewClicked(event) {
       this.choosenDay = moment(event.startDate).format("YYYY-MM-DD");
       this.getDayEvents();
+    },
+    async showModal(message) {
+      const value = await this.$bvModal.msgBoxConfirm(
+        "İşlemi onaylıyor musunuz?",
+        {
+          title: message,
+          okTitle: "Onay",
+          cancelTitle: "İptal",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        }
+      );
+      return value;
     },
     getDayEvents() {
       axios({
@@ -112,7 +386,15 @@ export default {
               class: sessionClass,
               startTime: el.SessionStart,
               endTime: el.SessionEnd,
-              backupCount: el.BackupCount
+              backupCount: el.BackupCount,
+              backupList: el.BackupList,
+              personCount: el.PersonCount,
+              tableInfo: el.TableLocation + " - " + el.TableNumber,
+              fullName: el.FullName,
+              phone: el.Phone,
+              customerId: el.CustomerId,
+              tablesId: el.TablesId,
+              day: el.Day
             });
           });
         }
