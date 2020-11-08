@@ -667,7 +667,6 @@ export default {
   cursor: pointer;
   color: white;
 }
-
 .vuecal__event.past {
   background-color: rgb(131, 131, 131);
   border: 1px solid rgb(131, 131, 131);
