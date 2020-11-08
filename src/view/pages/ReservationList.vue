@@ -194,8 +194,6 @@ export default {
   },
   methods: {
     Clicklendin(event) {
-      console.log(event);
-      debugger;
       this.appointmentInfo = [];
       this.backupList = [];
       if (event.fullName !== null || event.backupList.length > 0) {
