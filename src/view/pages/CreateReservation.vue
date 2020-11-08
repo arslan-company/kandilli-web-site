@@ -273,6 +273,7 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
+      currentTimeForMinute: "",
       timeCellHeight: 60,
       showCalendar: false,
       calendarTimeStart: 0,
@@ -314,6 +315,11 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Randevu Oluşturma" }]);
+    const now = new Date();
+    let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+    let minute =
+      now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+    this.currentTimeForMinute = parseInt(hour) * 60 + parseInt(minute);
 
     // Initialize form wizard
     const wizard = new KTWizard("kt_wizard_v1", {
@@ -371,12 +377,13 @@ export default {
       });
     },
     Clicklendin(event) {
-      if (event.class === "available") {
+      if (event.class !== "past") {
         this.Appointment.SessionId = event.sessionId;
         this.Appointment.TablesId = event.split;
         this.seansTime = event.startTime + " - " + event.endTime;
-      } else if (event.class === "full") {
-        this.showModal(event.backupCount);
+        if (event.class === "full") {
+          this.showModal(event.backupCount);
+        }
       }
     },
     async showModal(backupCount) {
@@ -422,8 +429,14 @@ export default {
             this.calendarTimeStart = res.data.data.timeFrom;
             this.calendarTimeEnd = res.data.data.timeTo;
             res.data.data.cellList.forEach(el => {
+              var sessionBegin = el.SessionStart;
+              var sessionArray = sessionBegin.split(":");
+              var hour = sessionArray[0];
+              var minute = sessionArray[1];
+              var sessionTotalMinute = parseInt(hour) * 60 + parseInt(minute);
               let sessionClass = "available";
               let title = "";
+
               if (
                 el.FullName !== "" &&
                 el.Phone !== 0 &&
@@ -432,7 +445,13 @@ export default {
                 title =
                   el.FullName + " " + el.Phone + " (" + el.PersonCount + ")";
               }
-              if (el.IsBreakTime === 1) {
+              if (
+                el.IsBreakTime === 1 ||
+                (moment(this.Appointment.Day).isSameOrBefore(
+                  moment(this.min).format("YYYY-MM-DD")
+                ) &&
+                  this.currentTimeForMinute > sessionTotalMinute)
+              ) {
                 sessionClass = "lunch";
               } else if (el.CustomerId !== null) {
                 sessionClass = "full";
@@ -500,11 +519,10 @@ export default {
   cursor: pointer;
 }
 .vuecal__event.past {
-  background-color: rgba(83, 83, 83);
-  border: 1px solid rgb(83, 83, 83);
+  background-color: rgb(131, 131, 131);
+  border: 1px solid rgb(131, 131, 131);
   border-right: 2px solid black;
   color: #fff;
-  cursor: pointer;
 }
 .vuecal__event.lunch {
   background: repeating-linear-gradient(
