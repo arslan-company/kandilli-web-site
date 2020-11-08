@@ -44,7 +44,7 @@
 
         <!--begin: Wizard Body-->
         <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
-          <div class="col-xl-12 col-xxl-9">
+          <div class="col-xl-12 wizard-container">
             <!--begin: Wizard Form-->
             <form class="form" id="kt_form">
               <!--begin: Wizard Step 1-->
@@ -122,26 +122,6 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
-                <vue-cal
-                  :selected-date="Appointment.Day"
-                  :time-from="calendarTimeStart"
-                  :time-to="calendarTimeEnd"
-                  :time-step="90"
-                  :disable-views="['years', 'year', 'month', 'week']"
-                  :events="events"
-                  :split-days="splitDays"
-                  :hidden="!showCalendar"
-                  :timeCellHeight="timeCellHeight"
-                  @event-focus="Clicklendin($event)"
-                  @view-change="ViewClicked($event)"
-                  sticky-split-labels
-                  today-button
-                  hide-view-selector
-                  active-view="day"
-                  style="margin-bottom:3%;"
-                  locale="tr"
-                >
-                </vue-cal>
                 <b-row>
                   <b-col>
                     <b-form-group label="Kişi Sayısı" label-for="PersonCount">
@@ -162,6 +142,26 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
+                <vue-cal
+                  :selected-date="Appointment.Day"
+                  :time-from="calendarTimeStart"
+                  :time-to="calendarTimeEnd"
+                  :time-step="90"
+                  :disable-views="['years', 'year', 'month', 'week']"
+                  :events="events"
+                  :split-days="splitDays"
+                  :hidden="!showCalendar"
+                  :timeCellHeight="timeCellHeight"
+                  @event-focus="onSelected($event)"
+                  @view-change="ViewClicked($event)"
+                  sticky-split-labels
+                  today-button
+                  hide-view-selector
+                  active-view="day"
+                  style="margin-bottom:3%;"
+                  locale="tr"
+                >
+                </vue-cal>
               </div>
               <!--end: Wizard Step 2-->
 
@@ -274,7 +274,7 @@ export default {
     const minDate = new Date(today);
     return {
       currentTimeForMinute: "",
-      timeCellHeight: 60,
+      timeCellHeight: 70,
       showCalendar: false,
       calendarTimeStart: 0,
       calendarTimeEnd: 0,
@@ -348,7 +348,7 @@ export default {
         result.data.data.forEach(el => {
           this.splitDays.push({
             id: el.TablesId,
-            label: el.TableLocation + " - " + el.TableNumber
+            label: `${el.TableLocation} - ${el.TableNumber} (${el.ChairCount} KİŞİ)`
           });
         });
       }
@@ -376,13 +376,37 @@ export default {
         });
       });
     },
-    Clicklendin(event) {
+    onSelected(event) {
       if (event.class !== "past") {
+        if (this.Appointment.SessionId !== 0) {
+          const prevSelected = this.events.find(
+            event =>
+              event.sessionId === this.Appointment.SessionId &&
+              event.split === this.Appointment.TablesId
+          );
+
+          if (prevSelected.class !== "full") {
+            prevSelected.class = "available";
+            prevSelected.title = "";
+            prevSelected.content = "";
+          }
+        }
+
         this.Appointment.SessionId = event.sessionId;
         this.Appointment.TablesId = event.split;
         this.seansTime = event.startTime + " - " + event.endTime;
+
         if (event.class === "full") {
           this.showModal(event.backupCount);
+        } else {
+          const selected = this.events.find(
+            event =>
+              event.sessionId === this.Appointment.SessionId &&
+              event.split === this.Appointment.TablesId
+          );
+          selected.class = "selected";
+          selected.title = this.Customer.FirstName + " " + this.Customer.LastName;
+          selected.content = `Tel: ${this.Customer.Phone} <br> Kişi Sayısı: ${this.Appointment.PersonCount}`;
         }
       }
     },
@@ -436,14 +460,15 @@ export default {
               var sessionTotalMinute = parseInt(hour) * 60 + parseInt(minute);
               let sessionClass = "available";
               let title = "";
+              let content = "";
 
               if (
                 el.FullName !== "" &&
                 el.Phone !== 0 &&
                 el.PersonCount !== null
               ) {
-                title =
-                  el.FullName + " " + el.Phone + " (" + el.PersonCount + ")";
+                title = el.FullName;
+                content = `Tel: ${el.Phone} <br> Kişi Sayısı: ${el.PersonCount}`;
               }
               if (
                 el.IsBreakTime === 1 ||
@@ -465,7 +490,8 @@ export default {
                 class: sessionClass,
                 startTime: el.SessionStart,
                 endTime: el.SessionEnd,
-                backupCount: el.BackupCount
+                backupCount: el.BackupCount,
+                content: content
               });
             });
             this.showCalendar = true;
@@ -492,7 +518,7 @@ export default {
           }
         });
       }
-    }
+    },
   }
 };
 </script>
@@ -503,8 +529,14 @@ export default {
   font-size: 26px;
 }
 .vuecal__event-title {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.vuecal__event-content {
   font-size: 12px;
 }
+
 .vuecal__event.full {
   background-color: rgba(255, 0, 0);
   border: 1px solid rgb(255, 0, 0);
@@ -512,16 +544,26 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+
 .vuecal__event.available {
-  background-color: rgba(164, 230, 210, 0.9);
+  background-color: rgba(8, 208, 147, 0.9);
   border: 1px solid rgb(144, 210, 190);
-  border-right: 2px solid black;
+  border-right: 2px solid #ebedf3;
   cursor: pointer;
 }
+
+.vuecal__event.selected {
+  background-color: rgba(174, 139, 61, 0.78);
+  border: 1px solid rgba(174, 139, 61, 0.78);
+  border-right: 2px solid #ebedf3;
+  cursor: pointer;
+  color: white;
+}
+
 .vuecal__event.past {
   background-color: rgb(131, 131, 131);
   border: 1px solid rgb(131, 131, 131);
-  border-right: 2px solid black;
+  border-right: 2px solid #ebedf3;
   color: #fff;
 }
 .vuecal__event.lunch {
@@ -536,11 +578,46 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 2px solid black;
+  border-right: 2px solid #ebedf3;
 }
 .vuecal__event.lunch .vuecal__event-time,
 .vuecal__event-time {
   display: none;
   align-items: center;
+}
+
+.vuecal__time-column {
+  width: 5em;
+  padding-right: 0.8em;
+}
+
+.vuecal__flex .vuecal__split-days-headers {
+  margin-left: 65px !important;
+  height: 3em !important;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.vuecal__time-column .vuecal__time-cell {
+  font-size: 1em;
+}
+
+.vuecal__time-cell {
+  height: 82px !important;
+}
+
+.wizard-container {
+  padding: 0 2.5em;
+}
+
+.vuecal__title-bar {
+  background-color: rgba(174, 139, 61, 0.78);
+  min-height: 2.5em;
+}
+
+.vuecal__title,
+.vuecal__arrow i.angle,
+.vuecal__today-btn span.default {
+  color: white;
 }
 </style>
