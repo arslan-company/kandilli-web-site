@@ -178,7 +178,7 @@ export default {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return {
-      timeCellHeight: 60,
+      timeCellHeight: 90,
       choosenDay: moment(today).format("YYYY-MM-DD"),
       splitDays: [],
       events: [],
@@ -361,13 +361,15 @@ export default {
           res.data.data.cellList.forEach(el => {
             let sessionClass = "available";
             let title = "";
+            let content = "";
+
             if (
               el.FullName !== "" &&
               el.Phone !== 0 &&
               el.PersonCount !== null
             ) {
-              title =
-                el.FullName + " " + el.Phone + " (" + el.PersonCount + ")";
+              title = el.FullName;
+              content = `Tel: ${el.Phone} <br> Kişi Sayısı: ${el.PersonCount}`;
             }
             if (el.IsBreakTime === 1) {
               sessionClass = "lunch";
@@ -392,7 +394,8 @@ export default {
               phone: el.Phone,
               customerId: el.CustomerId,
               tablesId: el.TablesId,
-              day: el.Day
+              day: el.Day,
+              content: content
             });
           });
         }
@@ -410,7 +413,7 @@ export default {
         result.data.data.forEach(el => {
           this.splitDays.push({
             id: el.TablesId,
-            label: el.TableLocation + " - " + el.TableNumber
+            label: `${el.TableLocation} - ${el.TableNumber} (${el.ChairCount} KİŞİ)`
           });
         });
       }
@@ -425,9 +428,17 @@ export default {
   color: rgba(0, 0, 0, 0.1);
   font-size: 26px;
 }
+
 .vuecal__event-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.vuecal__event-content {
   font-size: 12px;
 }
+
 .vuecal__event.full {
   background-color: rgba(255, 0, 0);
   border: 1px solid rgb(255, 0, 0);
@@ -467,4 +478,32 @@ export default {
   display: none;
   align-items: center;
 }
+
+.vuecal__title-bar {
+  background-color: rgba(174, 139, 61, 0.78);
+  min-height: 2.5em;
+}
+
+.vuecal__title,
+.vuecal__arrow i.angle,
+.vuecal__today-btn span.default {
+  color: white;
+}
+
+.vuecal__time-column {
+  width: 5em;
+  padding-right: 0.8em;
+}
+
+.vuecal__flex .vuecal__split-days-headers {
+  margin-left: 65px !important;
+  height: 3em !important;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.vuecal__time-column .vuecal__time-cell {
+  font-size: 1em;
+}
+
 </style>
