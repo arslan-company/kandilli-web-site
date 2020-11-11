@@ -91,6 +91,9 @@
                     </b-form-group>
                   </b-col>
                 </b-row>
+                <b-alert variant="danger" :show="isBlackListDanger">
+                  Müşteri kara listededir.
+                </b-alert>
               </div>
               <!--end: Wizard Step 1-->
 
@@ -375,6 +378,7 @@ export default {
     const minDate = new Date(today);
     return {
       currentTimeForMinute: "",
+      isBlackListDanger: false,
       timeCellHeight: 90,
       showCalendar: false,
       calendarTimeStart: 0,
@@ -620,6 +624,9 @@ export default {
         }).then(res => {
           if (res.data.data !== null) {
             this.Customer = res.data.data.customer;
+            if (this.Customer.BlackListPoint < 3) {
+              this.isBlackListDanger = true;
+            }
           }
         });
       }
