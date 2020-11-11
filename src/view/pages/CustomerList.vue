@@ -347,8 +347,6 @@ export default {
 }
 .fa-search {
   cursor: default;
-}
-::placeholder {
   color: #12a293;
 }
 </style>
