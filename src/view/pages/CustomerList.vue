@@ -77,7 +77,7 @@
               >
                 <span style="width: 40px">
                   <span class="font-weight-bolder">
-                    {{ item.customerID }}
+                    {{ index + 1 }}
                   </span>
                 </span>
               </td>
@@ -89,19 +89,19 @@
                       v-bind:class="getColor(item)"
                     >
                       <span class="symbol-label font-size-h4 font-weight-bold">
-                        {{ item.fullName[0] }}
+                        {{ item.FirstName[0] }}
                       </span>
                     </div>
                     <div class="ml-4">
                       <div
                         class="text-dark-75 font-weight-bolder font-size-lg mb-0"
                       >
-                        {{ item.fullName }}
+                        {{ item.FirstName + " " + item.LastName }}
                       </div>
                       <a
                         href="#"
                         class="text-muted font-weight-bold text-hover-primary"
-                        >{{ item.email }}</a
+                        >{{ item.Mail }}</a
                       >
                     </div>
                   </div>
@@ -113,21 +113,21 @@
               >
                 <span style="width: 146px">
                   <div class="font-weight-bolder font-size-lg mb-0">
-                    {{ item.phoneNumber }}
+                    {{ item.Phone }}
                   </div>
                 </span>
               </td>
               <td data-field="ReservationCount" class="datatable-cell">
                 <span style="width: 146px">
                   <div class="font-weight-bolder font-size-lg mb-0">
-                    {{ item.reservationCount }}
+                    {{ item.TotalAppointmentCount }}
                   </div>
                 </span>
               </td>
               <td data-field="ReservationCancelCount" class="datatable-cell">
                 <span style="width: 146px">
                   <div class="font-weight-bolder font-size-lg mb-0">
-                    {{ item.reservationCancelCount }}
+                    {{ item.CancelAppointmentCount }}
                   </div>
                 </span>
               </td>
@@ -139,7 +139,7 @@
                 <span style="width: 146px">
                   <span
                     class="label label-lg font-weight-bold label-light-success label-inline"
-                    >{{ item.blackListStatus }}
+                    >{{ item.BlackListPoint }}
                   </span>
                 </span>
               </td>
@@ -237,157 +237,12 @@
 
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
+const axios = require("axios").default;
 
 export default {
   data() {
     return {
-      forms: [],
-      customerList: [
-        {
-          customerID: 1,
-          fullName: "Enes ARSLAN",
-          phoneNumber: "05062254580",
-          email: "enes.arslan@test.com",
-          blackListStatus: 100,
-          reservationCount: 5,
-          reservationCancelCount: 2
-        },
-        {
-          customerID: 2,
-          fullName: "Test testoğlu",
-          phoneNumber: "05555555555",
-          email: "test.testoğlu@test.com",
-          blackListStatus: 50,
-          reservationCount: 1,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 3,
-          fullName: "Furkan ARSLAN",
-          phoneNumber: "05557105045",
-          email: "furkanarslan@deneme.com",
-          blackListStatus: 0,
-          reservationCount: 27,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 4,
-          fullName: "Burak ÖZDEMİR",
-          phoneNumber: "08888888888",
-          email: "fburakozdemir34@gmail.com",
-          blackListStatus: 87,
-          reservationCount: 0,
-          reservationCancelCount: 7
-        },
-        {
-          customerID: 5,
-          fullName: "Enes ARSLAN",
-          phoneNumber: "05062254580",
-          email: "enes.arslan@test.com",
-          blackListStatus: 100,
-          reservationCount: 5,
-          reservationCancelCount: 2
-        },
-        {
-          customerID: 6,
-          fullName: "Test testoğlu",
-          phoneNumber: "05555555555",
-          email: "test.testoğlu@test.com",
-          blackListStatus: 50,
-          reservationCount: 1,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 7,
-          fullName: "Furkan ARSLAN",
-          phoneNumber: "05557105045",
-          email: "furkanarslan@deneme.com",
-          blackListStatus: 8,
-          reservationCount: 27,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 9,
-          fullName: "Burak ÖZDEMİR",
-          phoneNumber: "08888888888",
-          email: "fburakozdemir34@gmail.com",
-          blackListStatus: 87,
-          reservationCount: 0,
-          reservationCancelCount: 7
-        },
-        {
-          customerID: 10,
-          fullName: "Enes ARSLAN",
-          phoneNumber: "05062254580",
-          email: "enes.arslan@test.com",
-          blackListStatus: 100,
-          reservationCount: 5,
-          reservationCancelCount: 2
-        },
-        {
-          customerID: 12,
-          fullName: "Test testoğlu",
-          phoneNumber: "05555555555",
-          email: "test.testoğlu@test.com",
-          blackListStatus: 50,
-          reservationCount: 1,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 13,
-          fullName: "Furkan ARSLAN",
-          phoneNumber: "05557105045",
-          email: "furkanarslan@deneme.com",
-          blackListStatus: 0,
-          reservationCount: 27,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 14,
-          fullName: "Burak ÖZDEMİR",
-          phoneNumber: "08888888888",
-          email: "fburakozdemir34@gmail.com",
-          blackListStatus: 87,
-          reservationCount: 0,
-          reservationCancelCount: 7
-        },
-        {
-          customerID: 15,
-          fullName: "Enes ARSLAN",
-          phoneNumber: "05062254580",
-          email: "enes.arslan@test.com",
-          blackListStatus: 100,
-          reservationCount: 5,
-          reservationCancelCount: 2
-        },
-        {
-          customerID: 16,
-          fullName: "Test testoğlu",
-          phoneNumber: "05555555555",
-          email: "test.testoğlu@test.com",
-          blackListStatus: 50,
-          reservationCount: 1,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 17,
-          fullName: "Furkan ARSLAN",
-          phoneNumber: "05557105045",
-          email: "furkanarslan@deneme.com",
-          blackListStatus: 0,
-          reservationCount: 27,
-          reservationCancelCount: 0
-        },
-        {
-          customerID: 18,
-          fullName: "Burak ÖZDEMİR",
-          phoneNumber: "08888888888",
-          email: "fburakozdemir34@gmail.com",
-          blackListStatus: 87,
-          reservationCount: 0,
-          reservationCancelCount: 7
-        }
-      ]
+      customerList: {}
     };
   },
   methods: {
@@ -413,10 +268,21 @@ export default {
           break;
       }
       return item.color;
+    },
+    getCustomerInfo() {
+      axios({
+        method: "get",
+        url: "https://kandilliservices.herokuapp.com/GetCustomerList"
+      }).then(result => {
+        if (result.data.data.length > 0) {
+          this.customerList = result.data.data;
+        }
+      });
     }
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Müşteri Listeleme" }]);
+    this.getCustomerInfo();
   }
 };
 </script>

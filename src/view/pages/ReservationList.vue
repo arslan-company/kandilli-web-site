@@ -505,5 +505,4 @@ export default {
 .vuecal__time-column .vuecal__time-cell {
   font-size: 1em;
 }
-
 </style>
