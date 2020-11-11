@@ -475,6 +475,9 @@ export default {
           text: "The application has been successfully submitted!",
           icon: "success"
         });
+        this.$router.push({
+          name: "ReservationList"
+        });
       });
     },
     onSelected(event) {
