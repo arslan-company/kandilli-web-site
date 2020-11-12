@@ -314,6 +314,7 @@ export default {
       return item.color;
     },
     getCustomerInfo() {
+      this.searchForm = "";
       axios({
         method: "get",
         url: "https://kandilliservices.herokuapp.com/GetCustomerList"
