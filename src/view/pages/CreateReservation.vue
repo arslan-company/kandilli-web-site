@@ -65,6 +65,7 @@
                         type="text"
                         placeholder="Örnek: 05555555555"
                         @change="onChangePhone"
+                        required
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -76,6 +77,7 @@
                         id="FirstName"
                         v-model="Customer.FirstName"
                         type="text"
+                        required
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -87,6 +89,7 @@
                         id="LastName"
                         v-model="Customer.LastName"
                         type="text"
+                        required
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -426,16 +429,9 @@ export default {
       now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
     this.currentTimeForMinute = parseInt(hour) * 60 + parseInt(minute);
 
-    // Initialize form wizard
     const wizard = new KTWizard("kt_wizard_v1", {
-      startStep: 1, // initial active step number
-      clickableSteps: true // allow step clicking
-    });
-
-    // Validation before going to next page
-    wizard.on("beforeNext", function(/*wizardObj*/) {
-      // validate the form and use below function to stop the wizard's step
-      // wizardObj.stop();
+      startStep: 1,
+      clickableSteps: false
     });
 
     // Change event
