@@ -70,7 +70,7 @@
                     type="text"
                     name="username"
                     ref="username"
-                    :value="form.Username"
+                    v-model="form.Username"
                   />
                 </div>
               </div>
@@ -96,7 +96,7 @@
                     type="password"
                     name="password"
                     ref="password"
-                    :value="form.Password"
+                    v-model="form.Password"
                     autocomplete="off"
                   />
                 </div>
@@ -190,10 +190,9 @@ export default {
   data() {
     return {
       state: "signin",
-      // Remove this dummy login info
       form: {
-        Username: "calisan",
-        Password: "12345"
+        Username: "",
+        Password: ""
       }
     };
   },

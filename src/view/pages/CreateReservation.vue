@@ -97,6 +97,62 @@
                 <b-alert variant="danger" :show="isBlackListDanger">
                   Müşteri kara listededir.
                 </b-alert>
+                <div
+                  class="row justify-content-center bg-primary py-8 px-8 py-md-10 px-md-0 mx-0"
+                  :hidden="customerInfoDetail"
+                >
+                  <div class="col-md-10">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="font-weight-bold text-white">
+                              Toplam Randevu Sayısı
+                            </th>
+                            <th class="font-weight-bold text-white">
+                              Tamamlanan Randevu Sayısı
+                            </th>
+                            <th class="font-weight-bold text-white">
+                              İptal Edilen Randevu Sayısı
+                            </th>
+                            <th class="font-weight-bold text-white text-center">
+                              Kara Liste Puanı
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="font-weight-bolder text-white">
+                            <td
+                              class="text--white font-size-h4 font-weight-boldest text-center"
+                            >
+                              {{ Customer.TotalAppointmentCount }}
+                            </td>
+                            <td
+                              class="text--white font-size-h4 font-weight-boldest text-center"
+                            >
+                              {{ Customer.DoneAppointmentCount }}
+                            </td>
+                            <td
+                              class="text--white font-size-h4 font-weight-boldest text-center"
+                            >
+                              {{ Customer.CancelAppointmentCount }}
+                            </td>
+                            <td
+                              class="text--white font-size-h4 font-weight-boldest text-center"
+                            >
+                              <v-rating
+                                length="5"
+                                color="warning"
+                                :value="Customer.BlackListPoint"
+                                readonly
+                              ></v-rating>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
               <!--end: Wizard Step 1-->
 
@@ -380,6 +436,7 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
+      customerInfoDetail: true,
       currentTimeForMinute: "",
       isBlackListDanger: false,
       timeCellHeight: 90,
@@ -618,8 +675,11 @@ export default {
             }
           }
         }).then(res => {
+          this.customerInfoDetail = true;
+          this.Customer = {};
           if (res.data.data !== null) {
             this.Customer = res.data.data.customer;
+            this.customerInfoDetail = false;
             if (this.Customer.BlackListPoint < 3) {
               this.isBlackListDanger = true;
             }

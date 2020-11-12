@@ -222,6 +222,7 @@
                       href="javascript:;"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
                       title="Delete"
+                      @click="onDeleteCustomer(item)"
                     >
                       <span class="svg-icon svg-icon-md">
                         <svg
@@ -306,6 +307,35 @@ export default {
       }).then(result => {
         if (result.data.data.length > 0) {
           this.customerList = result.data.data;
+        }
+      });
+    },
+    onDeleteCustomer(item) {
+      axios({
+        method: "post",
+        url: "https://kandilliservices.herokuapp.com/DeleteCustomer",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: {
+          CustomerId: item.CustomerId
+        }
+      }).then(result => {
+        if (result.data.code === 1) {
+          this.$bvToast.toast("Müşteri başarıyla silinmiştir.", {
+            title: "Bilgilendirme",
+            variant: "primary",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
+          this.getCustomerInfo();
+        } else {
+          this.$bvToast.toast("Müşteri silinemedi.", {
+            title: "Bilgilendirme",
+            variant: "warning",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
         }
       });
     },
