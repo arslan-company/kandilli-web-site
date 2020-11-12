@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="11">
+      <b-col cols="10">
         <b-form-group>
           <b-input-group class="mt-3">
             <b-input-group-prepend>
@@ -21,8 +21,21 @@
       </b-col>
       <b-col cols="1">
         <b-input-group class="mt-3">
-          <button class="btn font-weight-bold searchButton" @click="searchUser">
+          <button
+            class="btn font-weight-bold searchButton searchButtonDetail"
+            @click="searchUser"
+          >
             Ara
+          </button>
+        </b-input-group>
+      </b-col>
+      <b-col cols="1">
+        <b-input-group class="mt-3">
+          <button
+            class="btn font-weight-bold searchButton"
+            @click="getCustomerInfo"
+          >
+            Temizle
           </button>
         </b-input-group>
       </b-col>
@@ -340,7 +353,18 @@ export default {
       });
     },
     searchUser() {
-      // console.log("ara");
+      var newUserList = [];
+      this.customerList.forEach(element => {
+        if (
+          element.FirstName.toLowerCase().includes(this.searchForm) ||
+          element.LastName.toLowerCase().includes(this.searchForm) ||
+          element.Phone.includes(this.searchForm) ||
+          element.Mail.toLowerCase().includes(this.searchForm)
+        ) {
+          newUserList.push(element);
+        }
+      });
+      this.customerList = newUserList;
     }
   },
   mounted() {
@@ -361,9 +385,11 @@ export default {
 .searchButton {
   border: 1px solid #12a293;
   color: #12a293;
+  background-color: rgb(255, 255, 255);
+}
+.searchButtonDetail {
   padding-right: 35%;
   padding-left: 35%;
-  background-color: rgb(255, 255, 255);
 }
 .searchButton:hover {
   background-color: #12a293;
