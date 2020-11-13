@@ -196,6 +196,7 @@
                       href="javascript:;"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                       title="Edit details"
+                      @click="onEditCustomer(item)"
                     >
                       <span class="svg-icon svg-icon-md">
                         <svg
@@ -272,6 +273,112 @@
               </tr>
             </tbody>
           </table>
+          <b-modal v-model="isShowDetailModal" size="xl" title="Müşteri Detayı">
+            <b-container fluid>
+              <b-row>
+                <b-col>
+                  <b-form-group label="Adı" label-for="FirstName">
+                    <b-form-input
+                      id="FirstName"
+                      v-model="editCustomer.FirstName"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group label="Soyadı" label-for="LastName">
+                    <b-form-input
+                      id="LastName"
+                      v-model="editCustomer.LastName"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+
+              <b-row>
+                <b-col>
+                  <b-form-group label="Telefon Numarası" label-for="Phone">
+                    <b-form-input
+                      id="Phone"
+                      v-model="editCustomer.Phone"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group label="E-Posta" label-for="Mail">
+                    <b-form-input
+                      id="Mail"
+                      v-model="editCustomer.Mail"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    label="Toplam Rezervasyon Sayısı"
+                    label-for="TotalAppointmentCount"
+                  >
+                    <b-form-input
+                      id="TotalAppointmentCount"
+                      v-model="editCustomer.TotalAppointmentCount"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <label>Kara Liste Puanı</label>
+                  <v-rating
+                    length="5"
+                    color="#12a293"
+                    v-model="editCustomer.BlackListPoint"
+                  ></v-rating>
+                </b-col>
+              </b-row>
+
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    label="Tamamlanan Randevu Sayısı"
+                    label-for="DoneAppointmentCount"
+                  >
+                    <b-form-input
+                      id="DoneAppointmentCount"
+                      v-model="editCustomer.DoneAppointmentCount"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group
+                    label="İptal Edilen Randevu Sayısı"
+                    label-for="CancelAppointmentCount"
+                  >
+                    <b-form-input
+                      id="CancelAppointmentCount"
+                      v-model="editCustomer.CancelAppointmentCount"
+                      type="text"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-container>
+
+            <template v-slot:modal-footer>
+              <div class="w-100">
+                <button
+                  class="btn font-weight-bold saveButton"
+                  @click="saveCustomer"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </template>
+          </b-modal>
         </div>
       </div>
     </div>
@@ -286,7 +393,9 @@ export default {
   data() {
     return {
       customerList: {},
-      searchForm: ""
+      searchForm: "",
+      isShowDetailModal: false,
+      editCustomer: {}
     };
   },
   methods: {
@@ -370,6 +479,37 @@ export default {
         }
       });
       this.customerList = newUserList;
+    },
+    onEditCustomer(item) {
+      this.editCustomer = item;
+      this.isShowDetailModal = true;
+    },
+    saveCustomer() {
+      axios({
+        method: "post",
+        url: "https://kandilliservices.herokuapp.com/UpdateCustomer",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: this.editCustomer
+      }).then(result => {
+        if (result.data.code === 1) {
+          this.$bvToast.toast("Müşteri bilgileri başarıyla güncellenmiştir.", {
+            title: "Bilgilendirme",
+            variant: "primary",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
+          this.getCustomerInfo();
+        } else {
+          this.$bvToast.toast("Müşteri bilgileri güncellenemedi.", {
+            title: "Bilgilendirme",
+            variant: "warning",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
+        }
+      });
     }
   },
   mounted() {
@@ -387,7 +527,8 @@ export default {
   border: 1px groove #ffffff;
   border-left: none;
 }
-.searchButton {
+.searchButton,
+.saveButton:hover {
   border: 1px solid #12a293;
   color: #12a293;
   background-color: rgb(255, 255, 255);
@@ -396,7 +537,12 @@ export default {
   padding-right: 35%;
   padding-left: 35%;
 }
-.searchButton:hover {
+.saveButton {
+  float: right;
+  margin-right: 1%;
+}
+.searchButton:hover,
+.saveButton {
   background-color: #12a293;
   color: white;
 }
