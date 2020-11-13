@@ -357,10 +357,14 @@ export default {
       var newUserList = [];
       this.customerList.forEach(element => {
         if (
-          element.FirstName.toLowerCase().includes(this.searchForm) ||
-          element.LastName.toLowerCase().includes(this.searchForm) ||
+          element.FirstName.toLowerCase().includes(
+            this.searchForm.toLowerCase()
+          ) ||
+          element.LastName.toLowerCase().includes(
+            this.searchForm.toLowerCase()
+          ) ||
           element.Phone.includes(this.searchForm) ||
-          element.Mail.toLowerCase().includes(this.searchForm)
+          element.Mail.toLowerCase().includes(this.searchForm.toLowerCase())
         ) {
           newUserList.push(element);
         }
