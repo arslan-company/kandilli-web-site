@@ -676,7 +676,6 @@ export default {
           }
         }).then(res => {
           this.customerInfoDetail = true;
-          this.Customer = {};
           if (res.data.data !== null) {
             this.Customer = res.data.data.customer;
             this.customerInfoDetail = false;
