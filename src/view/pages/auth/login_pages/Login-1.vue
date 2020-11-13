@@ -56,6 +56,9 @@
                   Hoş Geldiniz
                 </h3>
               </div>
+              <b-alert :show="isShowAlert" variant="danger">
+                Geçersiz kullanıcı adı veya şifre
+              </b-alert>
               <div class="form-group">
                 <label class="font-size-h6 font-weight-bolder text-dark"
                   >Kullanıcı Adı</label
@@ -193,7 +196,8 @@ export default {
       form: {
         Username: "",
         Password: ""
-      }
+      },
+      isShowAlert: false
     };
   },
   computed: {
@@ -284,8 +288,14 @@ export default {
           this.$store
             .dispatch(LOGIN, { Username, Password })
             // go to which page after successfully login
-            .then(() => this.$router.push({ name: "dashboard" }))
-            .catch(() => {});
+            .then(() => {
+              if (this.$store.state.auth.errors === "Login başarısız.") {
+                this.isShowAlert = true;
+                return;
+              } else {
+                this.$router.push({ name: "dashboard" });
+              }
+            });
 
           submitButton.classList.remove(
             "spinner",
