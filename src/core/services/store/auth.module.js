@@ -38,7 +38,10 @@ const actions = {
           resolve(data);
         })
         .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
+          context.commit(SET_ERROR, response.data.message);
+          if (response.status === 400) {
+            resolve();
+          }
         });
     });
   },
