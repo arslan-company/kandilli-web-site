@@ -48,52 +48,48 @@
           <table class="datatable-table" style="display: block">
             <thead class="datatable-head">
               <tr class="datatable-row" style="left: 0px">
-                <th class="datatable-cell datatable-toggle-detail">
-                  <span></span>
-                </th>
-                <th
-                  data-field="CustomerID"
-                  class="datatable-cell-left datatable-cell datatable-cell-sort"
-                >
-                  <span style="width: 40px">#</span>
-                </th>
                 <th
                   data-field="CustomerInfo"
-                  class="datatable-cell datatable-cell-sort"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
                   <span style="width: 250px">Müşteri Bilgileri</span>
                 </th>
                 <th
                   data-field="PhoneNumber"
-                  class="datatable-cell datatable-cell-sort"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
                   <span style="width: 146px">Telefon Numarası</span>
                 </th>
                 <th
                   data-field="ReservationCount"
-                  class="datatable-cell datatable-cell-sort"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
-                  <span style="width: 146px">Toplam Rezervasyon Sayısı</span>
+                  <span style="width: 146px">Toplam Randevu Sayısı</span>
                 </th>
                 <th
                   data-field="ReservationCancelCount"
-                  class="datatable-cell datatable-cell-sort"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
-                  <span style="width: 146px">Rezervasyon İptal Sayısı</span>
+                  <span style="width: 146px">Randevu İptal Sayısı</span>
+                </th>
+                <th
+                  data-field="ReservationDoneCount"
+                  class="datatable-cell datatable-cell-sort text-center"
+                >
+                  <span style="width: 146px">Tamamlanan Randevu Sayısı</span>
                 </th>
                 <th
                   data-field="BlackListStatus"
-                  class="datatable-cell datatable-cell-sort"
-                  style="display: none"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
-                  <span style="width: 146px">Kara Liste Puanı</span>
+                  <span style="width: 146px">Müşteri Sadakati</span>
                 </th>
                 <th
                   data-field="Actions"
                   data-autohide-disabled="false"
-                  class="datatable-cell datatable-cell-sort"
+                  class="datatable-cell datatable-cell-sort text-center"
                 >
-                  <span style="width: 130px">İşlemler</span>
+                  <span style="width: 120px">İşlemler</span>
                 </th>
               </tr>
             </thead>
@@ -102,30 +98,18 @@
                 data-row="0"
                 class="datatable-row"
                 style="left: 0px"
-                v-for="(item, index) in this.customerList"
+                v-for="(item, index) in pageCustomerList"
                 :key="index"
               >
                 <td class="datatable-cell datatable-toggle-detail">
-                  <a class="datatable-toggle-detail" href="">
-                    <i class="fa fa-caret-right"></i>
-                  </a>
-                </td>
-                <td
-                  class="datatable-cell-left datatable-cell"
-                  data-field="CustomerID"
-                >
-                  <span style="width: 40px">
-                    <span class="font-weight-bolder">
-                      {{ index + 1 }}
-                    </span>
-                  </span>
+                  <i class="fa fa-caret-right"></i>
                 </td>
                 <td data-field="CustomerInfo" class="datatable-cell">
                   <span style="width: 250px">
                     <div class="d-flex align-items-center">
                       <div
                         class="symbol symbol-40 flex-shrink-0"
-                        v-bind:class="getColor(item)"
+                        :class="item.color"
                       >
                         <span
                           class="symbol-label font-size-h4 font-weight-bold"
@@ -172,16 +156,22 @@
                     </div>
                   </span>
                 </td>
-                <td
-                  data-field="BlackListStatus"
-                  class="datatable-cell"
-                  style="display: none"
-                >
+                <td data-field="ReservationDoneCount" class="datatable-cell">
                   <span style="width: 146px">
-                    <span
-                      class="label label-lg font-weight-bold label-light-success label-inline"
-                      >{{ item.BlackListPoint }}
-                    </span>
+                    <div class="font-weight-bolder font-size-lg mb-0">
+                      {{ item.DoneAppointmentCount }}
+                    </div>
+                  </span>
+                </td>
+                <td data-field="BlackListStatus" class="datatable-cell">
+                  <span style="width:138px">
+                    <v-rating
+                      length="5"
+                      color="#12a293"
+                      v-model="item.BlackListPoint"
+                      readonly
+                      size="15"
+                    ></v-rating>
                   </span>
                 </td>
                 <td
@@ -189,13 +179,9 @@
                   data-autohide-disabled="false"
                   class="datatable-cell"
                 >
-                  <span
-                    style="overflow: visible; position: relative; width: 130px"
-                  >
+                  <span style="overflow:visible;position:relative;width:130px">
                     <a
-                      href="javascript:;"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
-                      title="Edit details"
                       @click="onEditCustomer(item)"
                     >
                       <span class="svg-icon svg-icon-md">
@@ -233,9 +219,7 @@
                       </span>
                     </a>
                     <a
-                      href="javascript:;"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
-                      title="Delete"
                       @click="onDeleteCustomer(item)"
                     >
                       <span class="svg-icon svg-icon-md">
@@ -273,6 +257,14 @@
               </tr>
             </tbody>
           </table>
+          <b-pagination
+            v-model="pageSize"
+            :total-rows="totalPage"
+            :per-page="perPage"
+            align="right"
+            @input="onChangePagination"
+            style="margin-top:2%;"
+          ></b-pagination>
           <b-modal v-model="isShowDetailModal" size="xl" title="Müşteri Detayı">
             <b-container fluid>
               <b-row>
@@ -320,7 +312,7 @@
               <b-row>
                 <b-col>
                   <b-form-group
-                    label="Toplam Rezervasyon Sayısı"
+                    label="Toplam Randevu Sayısı"
                     label-for="TotalAppointmentCount"
                   >
                     <b-form-input
@@ -331,7 +323,7 @@
                   </b-form-group>
                 </b-col>
                 <b-col>
-                  <label>Kara Liste Puanı</label>
+                  <label>Müşteri Sadakati</label>
                   <v-rating
                     length="5"
                     color="#12a293"
@@ -392,35 +384,41 @@ const axios = require("axios").default;
 export default {
   data() {
     return {
-      customerList: {},
+      customerList: [],
       searchForm: "",
       isShowDetailModal: false,
-      editCustomer: {}
+      editCustomer: {},
+      pageSize: 0,
+      totalPage: 0,
+      perPage: 20,
+      pageCustomerList: [],
+      colorControl: 0
     };
   },
   methods: {
-    getColor(item) {
+    getColor() {
       const temp = Math.floor(Math.random() * 5) + 1;
+      var color = "";
       switch (temp) {
         case 1:
-          item.color = "symbol-light-primary";
+          color = "symbol-light-primary";
           break;
         case 2:
-          item.color = "symbol-light-success";
+          color = "symbol-light-success";
           break;
         case 3:
-          item.color = "symbol-light-danger";
+          color = "symbol-light-danger";
           break;
         case 4:
-          item.color = "symbol-light-warning";
+          color = "symbol-light-warning";
           break;
         case 5:
-          item.color = "symbol-light-info";
+          color = "symbol-light-info";
           break;
         default:
           break;
       }
-      return item.color;
+      return color;
     },
     getCustomerInfo() {
       this.searchForm = "";
@@ -430,6 +428,13 @@ export default {
       }).then(result => {
         if (result.data.data.length > 0) {
           this.customerList = result.data.data;
+          if (this.customerList.length > this.perPage) {
+            this.totalPage = this.customerList.length;
+          }
+          this.customerList.forEach(el => {
+            el.color = this.getColor();
+          });
+          this.onChangePagination();
         }
       });
     },
@@ -510,6 +515,14 @@ export default {
           });
         }
       });
+    },
+    onChangePagination() {
+      if (this.pageSize !== null) {
+        this.pageCustomerList = this.customerList.slice(
+          (this.pageSize - 1) * this.perPage,
+          this.pageSize * this.perPage
+        );
+      }
     }
   },
   mounted() {
