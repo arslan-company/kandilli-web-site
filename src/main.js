@@ -6,6 +6,14 @@ import ApiService from "@/core/services/api.service";
 // import MockService from "@/core/mock/mock.service";
 import { VERIFY_AUTH } from "@/core/services/store/auth.module";
 import { RESET_LAYOUT_CONFIG } from "@/core/services/store/config.module";
+import {
+  ValidationObserver,
+  ValidationProvider,
+  extend,
+  localize
+} from "vee-validate";
+import tr from "vee-validate/dist/locale/tr.json";
+import * as rules from "vee-validate/dist/rules";
 
 Vue.config.productionTip = false;
 
@@ -31,6 +39,13 @@ import "@mdi/font/css/materialdesignicons.css";
 
 // API service init
 ApiService.init();
+
+Object.keys(rules).forEach(rule => {
+  extend(rule, rules[rule]);
+});
+localize("tr", tr);
+Vue.component("ValidationObserver", ValidationObserver);
+Vue.component("ValidationProvider", ValidationProvider);
 
 // Remove this to disable mock API
 // MockService.init();
