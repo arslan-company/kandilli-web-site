@@ -311,18 +311,6 @@
 
               <b-row>
                 <b-col>
-                  <b-form-group
-                    label="Toplam Randevu Sayısı"
-                    label-for="TotalAppointmentCount"
-                  >
-                    <b-form-input
-                      id="TotalAppointmentCount"
-                      v-model="editCustomer.TotalAppointmentCount"
-                      type="text"
-                    ></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col>
                   <label>Müşteri Sadakati</label>
                   <v-rating
                     length="5"
@@ -330,33 +318,7 @@
                     v-model="editCustomer.BlackListPoint"
                   ></v-rating>
                 </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col>
-                  <b-form-group
-                    label="Tamamlanan Randevu Sayısı"
-                    label-for="DoneAppointmentCount"
-                  >
-                    <b-form-input
-                      id="DoneAppointmentCount"
-                      v-model="editCustomer.DoneAppointmentCount"
-                      type="text"
-                    ></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col>
-                  <b-form-group
-                    label="İptal Edilen Randevu Sayısı"
-                    label-for="CancelAppointmentCount"
-                  >
-                    <b-form-input
-                      id="CancelAppointmentCount"
-                      v-model="editCustomer.CancelAppointmentCount"
-                      type="text"
-                    ></b-form-input>
-                  </b-form-group>
-                </b-col>
+                <b-col></b-col>
               </b-row>
             </b-container>
 
@@ -496,7 +458,14 @@ export default {
         headers: {
           "Content-Type": "application/json"
         },
-        data: this.editCustomer
+        data: {
+          CustomerId: this.editCustomer.CustomerId,
+          FirstName: this.editCustomer.FirstName,
+          LastName: this.editCustomer.LastName,
+          Phone: this.editCustomer.Phone,
+          Mail: this.editCustomer.Mail,
+          BlackListPoint: this.editCustomer.BlackListPoint
+        }
       }).then(result => {
         if (result.data.code === 1) {
           this.$bvToast.toast("Müşteri bilgileri başarıyla güncellenmiştir.", {

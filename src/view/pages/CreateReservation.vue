@@ -559,17 +559,15 @@ export default {
 
         if (event.class === "full") {
           this.showModal(event.backupCount);
-        } else {
-          const selected = this.events.find(
-            event =>
-              event.sessionId === this.Appointment.SessionId &&
-              event.split === this.Appointment.TablesId
-          );
-          selected.class = "selected";
-          selected.title =
-            this.Customer.FirstName + " " + this.Customer.LastName;
-          selected.content = `Tel: ${this.Customer.Phone} <br> Kişi Sayısı: ${this.Appointment.PersonCount}`;
         }
+        const selected = this.events.find(
+          event =>
+            event.sessionId === this.Appointment.SessionId &&
+            event.split === this.Appointment.TablesId
+        );
+        selected.class = "selected";
+        selected.title = this.Customer.FirstName + " " + this.Customer.LastName;
+        selected.content = `Tel: ${this.Customer.Phone} <br> Kişi Sayısı: ${this.Appointment.PersonCount}`;
       }
     },
     async showModal(backupCount) {
@@ -701,13 +699,13 @@ export default {
 }
 
 .vuecal__event-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .vuecal__event-content {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .vuecal__event.full {
