@@ -123,11 +123,7 @@
                         >
                           {{ item.FirstName + " " + item.LastName }}
                         </div>
-                        <a
-                          href="#"
-                          class="text-muted font-weight-bold text-hover-primary"
-                          >{{ item.Mail }}</a
-                        >
+                        <span style="color:#12a293">{{ item.Mail }}</span>
                       </div>
                     </div>
                   </span>
@@ -220,7 +216,7 @@
                     </a>
                     <a
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
-                      @click="onDeleteCustomer(item)"
+                      @click="showModal(item)"
                     >
                       <span class="svg-icon svg-icon-md">
                         <svg
@@ -308,6 +304,27 @@
                   </b-form-group>
                 </b-col>
               </b-row>
+
+              <!-- <b-row>
+                <b-col>
+                  <label for="birthDay">Doğum Günü</label>
+                  <b-form-datepicker
+                    id="birthDay"
+                    v-model="Appointment.Day"
+                    class="mb-8"
+                    placeholder=""
+                  ></b-form-datepicker>
+                </b-col>
+                <b-col>
+                  <label for="weddingAnniversary">Evlilik Yıl Dönümü</label>
+                  <b-form-datepicker
+                    id="weddingAnniversary"
+                    v-model="Appointment.Day"
+                    class="mb-8"
+                    placeholder=""
+                  ></b-form-datepicker>
+                </b-col>
+              </b-row> -->
 
               <b-row>
                 <b-col>
@@ -400,6 +417,22 @@ export default {
         }
       });
     },
+    async showModal(item) {
+      const value = await this.$bvModal.msgBoxConfirm(
+        "İşlemi onaylıyor musunuz?",
+        {
+          title: "Müşteri bilgileri silinecektir.",
+          okTitle: "Onay",
+          cancelTitle: "İptal",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        }
+      );
+      if (value) {
+        this.onDeleteCustomer(item);
+      }
+    },
     onDeleteCustomer(item) {
       axios({
         method: "post",
@@ -431,7 +464,7 @@ export default {
     },
     searchUser() {
       var newUserList = [];
-      this.customerList.forEach(element => {
+      this.pageCustomerList.forEach(element => {
         if (
           element.FirstName.toLowerCase().includes(
             this.searchForm.toLowerCase()
@@ -445,7 +478,7 @@ export default {
           newUserList.push(element);
         }
       });
-      this.customerList = newUserList;
+      this.pageCustomerList = newUserList;
     },
     onEditCustomer(item) {
       this.editCustomer = item;
@@ -475,6 +508,7 @@ export default {
             solid: true
           });
           this.getCustomerInfo();
+          this.isShowDetailModal = false;
         } else {
           this.$bvToast.toast("Müşteri bilgileri güncellenemedi.", {
             title: "Bilgilendirme",
