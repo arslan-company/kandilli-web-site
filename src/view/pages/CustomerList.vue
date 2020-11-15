@@ -305,26 +305,26 @@
                 </b-col>
               </b-row>
 
-              <!-- <b-row>
+              <b-row>
                 <b-col>
-                  <label for="birthDay">Doğum Günü</label>
+                  <label for="BirthDay">Doğum Günü</label>
                   <b-form-datepicker
-                    id="birthDay"
-                    v-model="Appointment.Day"
+                    id="BirthDay"
+                    v-model="editCustomer.BirthDay"
                     class="mb-8"
                     placeholder=""
                   ></b-form-datepicker>
                 </b-col>
                 <b-col>
-                  <label for="weddingAnniversary">Evlilik Yıl Dönümü</label>
+                  <label for="AnniversaryDay">Evlilik Yıl Dönümü</label>
                   <b-form-datepicker
-                    id="weddingAnniversary"
-                    v-model="Appointment.Day"
+                    id="AnniversaryDay"
+                    v-model="editCustomer.AnniversaryDay"
                     class="mb-8"
                     placeholder=""
                   ></b-form-datepicker>
                 </b-col>
-              </b-row> -->
+              </b-row>
 
               <b-row>
                 <b-col>
@@ -497,7 +497,9 @@ export default {
           LastName: this.editCustomer.LastName,
           Phone: this.editCustomer.Phone,
           Mail: this.editCustomer.Mail,
-          BlackListPoint: this.editCustomer.BlackListPoint
+          BlackListPoint: this.editCustomer.BlackListPoint,
+          BirthDay: this.editCustomer.BirthDay,
+          AnniversaryDay: this.editCustomer.AnniversaryDay
         }
       }).then(result => {
         if (result.data.code === 1) {
