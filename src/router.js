@@ -1,9 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
+import ApiService from "./core/services/api.service";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
@@ -39,7 +40,10 @@ export default new Router({
         {
           name: "login",
           path: "/login",
-          component: () => import("@/view/pages/auth/login_pages/Login-1")
+          component: () => import("@/view/pages/auth/login_pages/Login-1"),
+          meta: {
+            allowAnonymous: true
+          }
         },
         {
           name: "register",
@@ -60,3 +64,16 @@ export default new Router({
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta.allowAnonymous && !ApiService.isLoggedIn()) {
+    next({
+      path: "/login",
+      query: { redirect: to.fullPath }
+    });
+  } else {
+    next();
+  }
+});
+
+export default router;

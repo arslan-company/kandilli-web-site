@@ -2,6 +2,7 @@ import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import JwtService from "@/core/services/jwt.service";
+import decode from "jwt-decode";
 
 /**
  * Service to call HTTP request via Axios
@@ -26,6 +27,26 @@ const ApiService = {
       // console.log(error);
       throw new Error(`[KT] ApiService ${error}`);
     });
+  },
+
+  isLoggedIn() {
+    let authToken = JwtService.getToken();
+    return !!authToken && !this.isTokenExpired(authToken);
+  },
+
+  isTokenExpired(token) {
+    let expirationDate = this.getTokenExpirationDate(token);
+    return expirationDate < new Date();
+  },
+
+  getTokenExpirationDate(encodedToken) {
+    let token = decode(encodedToken);
+    if (!token.exp) {
+      return null;
+    }
+    let date = new Date(0);
+    date.setUTCSeconds(token.exp);
+    return date;
   },
 
   /**

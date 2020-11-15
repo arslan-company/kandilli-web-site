@@ -56,47 +56,34 @@
                 <h3 class="mb-10 font-weight-bold text-dark">
                   Müşteri Bilgilerini Girin
                 </h3>
-                <b-row>
-                  <b-col>
-                    <b-form-group label="Telefon Numarası" label-for="Phone">
-                      <b-form-input
-                        id="Phone"
-                        v-model="Customer.Phone"
-                        type="text"
-                        placeholder="Örnek: 05555555555"
-                        @change="onChangePhone"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col>
-                    <b-form-group label="Müşteri Adı" label-for="FirstName">
-                      <b-form-input
-                        id="FirstName"
-                        v-model="Customer.FirstName"
-                        type="text"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col>
-                    <b-form-group label="Müşteri Soyadı" label-for="LastName">
-                      <b-form-input
-                        id="LastName"
-                        v-model="Customer.LastName"
-                        type="text"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
+                <v-form ref="wizard1Form" v-model="valid" validation>
+                  <v-text-field
+                    v-model="Customer.Phone"
+                    :rules="phoneRules"
+                    label="Telefon Numarası"
+                    @change="onChangePhone"
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="Customer.FirstName"
+                    :rules="nameRules"
+                    label="Müşteri Adı"
+                    required
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="Customer.LastName"
+                    :rules="surnameRules"
+                    label="Müşteri Soyadı"
+                    required
+                  ></v-text-field>
+                </v-form>
+
                 <b-alert variant="danger" :show="isBlackListDanger">
                   Müşteri kara listededir.
                 </b-alert>
+
                 <div
                   class="row justify-content-center bg-primary py-8 px-8 py-md-10 px-md-0 mx-0"
                   :hidden="customerInfoDetail"
@@ -191,6 +178,7 @@
                         id="PersonCount"
                         v-model="Appointment.PersonCount"
                         type="number"
+                        @change="onSelectedDayPart"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -395,6 +383,7 @@
                   <button
                     class="btn btn-primary font-weight-bold text-uppercase px-9 py-4"
                     data-wizard-type="action-next"
+                    :disabled="!valid"
                   >
                     İleri
                   </button>
@@ -436,6 +425,10 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
+      valid: true,
+      phoneRules: [v => !!v || "Telefon Numarası alanı boş olamaz."],
+      nameRules: [v => !!v || "Müşteri Adı boş olamaz."],
+      surnameRules: [v => !!v || "Müşteri Soyadı boş olamaz."],
       customerInfoDetail: true,
       currentTimeForMinute: "",
       isBlackListDanger: false,
@@ -449,7 +442,8 @@ export default {
         FirstName: "",
         LastName: "",
         Phone: "",
-        Mail: ""
+        Mail: "",
+        BlackListPoint: 0
       },
       Appointment: {
         SessionId: 0,
@@ -593,7 +587,11 @@ export default {
       this.onSelectedDayPart();
     },
     onSelectedDayPart() {
-      if (this.Appointment.Day !== "" && this.dayPart !== "") {
+      if (
+        this.Appointment.Day !== "" &&
+        this.dayPart !== "" &&
+        this.Appointment.PersonCount !== 0
+      ) {
         axios({
           method: "post",
           url:
@@ -673,6 +671,11 @@ export default {
             }
           }
         }).then(res => {
+          if (res.data.code === 0) {
+            this.Customer.FirstName = "";
+            this.Customer.LastName = "";
+            this.Customer.Mail = "";
+          }
           this.customerInfoDetail = true;
           if (res.data.data !== null) {
             this.Customer = res.data.data.customer;
