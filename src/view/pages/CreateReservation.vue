@@ -57,26 +57,38 @@
                   Müşteri Bilgilerini Girin
                 </h3>
                 <v-form ref="wizard1Form" v-model="valid" validation>
+                  <v-chip label style="background-color:white">
+                    Telefon Numarası
+                  </v-chip>
                   <v-text-field
+                    solo
                     v-model="Customer.Phone"
                     :rules="phoneRules"
-                    label="Telefon Numarası"
+                    placeholder="Örnek: 05555555555"
                     @change="onChangePhone"
                     required
                   ></v-text-field>
 
+                  <v-chip label style="background-color:white">
+                    Müşteri Adı
+                  </v-chip>
                   <v-text-field
                     v-model="Customer.FirstName"
                     :rules="nameRules"
-                    label="Müşteri Adı"
                     required
+                    @change="checkCustomerInfo"
+                    solo
                   ></v-text-field>
 
+                  <v-chip label style="background-color:white">
+                    Müşteri Soyadı
+                  </v-chip>
                   <v-text-field
                     v-model="Customer.LastName"
                     :rules="surnameRules"
-                    label="Müşteri Soyadı"
                     required
+                    @change="checkCustomerInfo"
+                    solo
                   ></v-text-field>
                 </v-form>
 
@@ -93,17 +105,14 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th class="font-weight-bold text-white">
-                              Toplam Randevu Sayısı
+                            <th class="font-weight-bold text-white text-center">
+                              Aldığı Randevu Sayısı
                             </th>
-                            <th class="font-weight-bold text-white">
-                              Tamamlanan Randevu Sayısı
-                            </th>
-                            <th class="font-weight-bold text-white">
+                            <th class="font-weight-bold text-white text-center">
                               İptal Edilen Randevu Sayısı
                             </th>
                             <th class="font-weight-bold text-white text-center">
-                              Kara Liste Puanı
+                              Sadakat Yıldızı
                             </th>
                           </tr>
                         </thead>
@@ -113,11 +122,6 @@
                               class="text--white font-size-h4 font-weight-boldest text-center"
                             >
                               {{ Customer.TotalAppointmentCount }}
-                            </td>
-                            <td
-                              class="text--white font-size-h4 font-weight-boldest text-center"
-                            >
-                              {{ Customer.DoneAppointmentCount }}
                             </td>
                             <td
                               class="text--white font-size-h4 font-weight-boldest text-center"
@@ -148,6 +152,14 @@
                 <h4 class="mb-10 font-weight-bold text-dark">
                   Rezervasyon Bilgilerini Girin
                 </h4>
+
+                <b-alert variant="warning" show style="margin-bottom:%4">
+                  <p>
+                    Bebek arabasının kabul edilmediğini ve varsa çocukların
+                    kucakta tutulması gerektiği bilgisi müşteriye verilmeli.
+                  </p>
+                </b-alert>
+
                 <b-row>
                   <b-col>
                     <label for="Day">Tarih</label>
@@ -217,9 +229,6 @@
 
               <!--begin: Wizard Step 3-->
               <div class="pb-5" data-wizard-type="step-content">
-                <!--                <h4 class="mb-10 font-weight-bold text-dark">-->
-                <!--                  Girdiğiniz Bilgileri Revize Edin-->
-                <!--                </h4>-->
                 <div class="position-absolute opacity-30">
                   <span class="svg-icon svg-icon-10x svg-logo-white">
                     <!--begin::Svg Icon | path:/metronic/theme/html/demo3/dist/assets/media/svg/shapes/abstract-8.svg-->
@@ -272,23 +281,9 @@
                       class="d-flex justify-content-between align-items-md-center flex-column flex-md-row"
                     >
                       <div class="d-flex flex-column px-0 order-2 order-md-1">
-                        <!--begin::Logo-->
-                        <!--                        <a href="#" class="mb-5 max-w-115px">-->
-                        <!--														<span class="svg-icon svg-icon-full svg-logo-white">-->
-                        <!--															&lt;!&ndash;begin::Svg Icon | path:/metronic/theme/html/demo3/dist/assets/media/svg/logos/duolingo.svg&ndash;&gt;-->
-                        <!--															<svg xmlns="http://www.w3.org/2000/svg" width="113" height="31" viewBox="0 0 113 31" fill="none">-->
-
-                        <!--															</svg>-->
-                        <!--                              &lt;!&ndash;end::Svg Icon&ndash;&gt;-->
-                        <!--														</span>-->
-                        <!--                        </a>-->
-                        <!--end::Logo-->
                         <span
                           class="d-flex flex-column font-size-h4 font-weight-bold text-white"
                         >
-                          <!--                          <span>-->
-                          <!--                            <strong>{{ Appointment.Day }}</strong> Tarihine</span>-->
-                          <!--														<span><strong>{{ seansTime }}</strong> Seansına Randevu Özeti</span>-->
                         </span>
                       </div>
                       <h1
@@ -447,7 +442,7 @@ export default {
       },
       Appointment: {
         SessionId: 0,
-        TablesId: 0,
+        Tables: [],
         Day: "",
         PersonCount: 0,
         Description: "",
@@ -523,7 +518,7 @@ export default {
       }).then(() => {
         Swal.fire({
           title: "",
-          text: "The application has been successfully submitted!",
+          text: "Randevu kaydı başarıyla sonuçlanmıştır.",
           icon: "success"
         });
         this.$router.push({
@@ -531,13 +526,13 @@ export default {
         });
       });
     },
-    onSelected(event) {
-      if (event.class !== "past" && event.class !== "lunch") {
+    onSelected(param) {
+      if (param.class !== "past" && param.class !== "lunch") {
         if (this.Appointment.SessionId !== 0) {
           const prevSelected = this.events.find(
             event =>
               event.sessionId === this.Appointment.SessionId &&
-              event.split === this.Appointment.TablesId
+              event.split === this.Appointment.Tables[0]
           );
 
           if (prevSelected.class !== "full") {
@@ -546,18 +541,19 @@ export default {
             prevSelected.content = "";
           }
         }
+        this.Appointment.Tables = [];
+        this.Appointment.SessionId = param.sessionId;
+        this.Appointment.Tables.push(param.split);
+        this.seansTime = param.startTime + " - " + param.endTime;
 
-        this.Appointment.SessionId = event.sessionId;
-        this.Appointment.TablesId = event.split;
-        this.seansTime = event.startTime + " - " + event.endTime;
-
-        if (event.class === "full") {
-          this.showModal(event.backupCount);
+        if (param.class === "full") {
+          this.showModal(param.backupCount);
         }
+
         const selected = this.events.find(
           event =>
             event.sessionId === this.Appointment.SessionId &&
-            event.split === this.Appointment.TablesId
+            event.split === this.Appointment.Tables[0]
         );
         selected.class = "selected";
         selected.title = this.Customer.FirstName + " " + this.Customer.LastName;
@@ -684,6 +680,25 @@ export default {
               this.isBlackListDanger = true;
             }
           }
+        });
+      }
+    },
+    checkCustomerInfo() {
+      if (this.Customer.FirstName !== "" && this.Customer.LastName !== "") {
+        axios({
+          method: "get",
+          url:
+            "https://google-search3.p.rapidapi.com/api/v1/search/q=" +
+            encodeURI(this.Customer.FirstName + " " + this.Customer.LastName) +
+            "-site:youtube.com&lr=lang_tr&cr=TR",
+          headers: {
+            ["x-rapidapi-key"]:
+              "fe8b5a22fdmshd749bd0abc06febp110dcejsne9594a5d640a",
+            ["x-rapidapi-host"]: "google-search3.p.rapidapi.com"
+          }
+        }).then(res => {
+          console.log(res);
+          debugger;
         });
       }
     }
