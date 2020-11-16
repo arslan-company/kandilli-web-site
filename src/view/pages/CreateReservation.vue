@@ -57,7 +57,7 @@
                   Müşteri Bilgilerini Girin
                 </h3>
                 <v-form ref="wizard1Form" v-model="valid" validation>
-                  <v-chip label style="background-color:white">
+                  <v-chip label style="background-color: white">
                     Telefon Numarası
                   </v-chip>
                   <v-text-field
@@ -69,7 +69,7 @@
                     required
                   ></v-text-field>
 
-                  <v-chip label style="background-color:white">
+                  <v-chip label style="background-color: white">
                     Müşteri Adı
                   </v-chip>
                   <v-text-field
@@ -80,7 +80,7 @@
                     solo
                   ></v-text-field>
 
-                  <v-chip label style="background-color:white">
+                  <v-chip label style="background-color: white">
                     Müşteri Soyadı
                   </v-chip>
                   <v-text-field
@@ -144,6 +144,43 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div
+                    v-for="(item, index) in customerInfoGoogle"
+                    :key="index"
+                    class="col-xl-3"
+                  >
+                    <div class="card card-custom gutter-b card-stretch">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div
+                            class="flex-shrink-0 mr-4 symbol symbol-40 symbol-circle"
+                          >
+                            <img :src="item.imageURL" alt="image" />
+                          </div>
+                          <div class="d-flex flex-column mr-auto">
+                            <div class="d-flex flex-column mr-auto">
+                              <a
+                                :href="item.link"
+                                class="text-dark text-hover-primary font-size-h7 font-weight-bolder mb-1"
+                                >{{ item.title }}</a
+                              >
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-8 mt-5 font-weight-bold">
+                          {{ item.description }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <v-overlay :value="overlay">
+                  <v-progress-circular
+                    indeterminate
+                    size="64"
+                  ></v-progress-circular>
+                </v-overlay>
               </div>
               <!--end: Wizard Step 1-->
 
@@ -153,7 +190,7 @@
                   Rezervasyon Bilgilerini Girin
                 </h4>
 
-                <b-alert variant="warning" show style="margin-bottom:%4">
+                <b-alert variant="warning" show style="margin-bottom: %4">
                   <p>
                     Bebek arabasının kabul edilmediğini ve varsa çocukların
                     kucakta tutulması gerektiği bilgisi müşteriye verilmeli.
@@ -421,6 +458,8 @@ export default {
     const minDate = new Date(today);
     return {
       valid: true,
+      overlay: false,
+      customerInfoGoogle: [],
       phoneRules: [v => !!v || "Telefon Numarası alanı boş olamaz."],
       nameRules: [v => !!v || "Müşteri Adı boş olamaz."],
       surnameRules: [v => !!v || "Müşteri Soyadı boş olamaz."],
@@ -685,20 +724,36 @@ export default {
     },
     checkCustomerInfo() {
       if (this.Customer.FirstName !== "" && this.Customer.LastName !== "") {
+        this.overlay = true;
         axios({
           method: "get",
           url:
             "https://google-search3.p.rapidapi.com/api/v1/search/q=" +
-            encodeURI(this.Customer.FirstName + " " + this.Customer.LastName) +
-            "-site:youtube.com&lr=lang_tr&cr=TR",
+            encodeURI(this.Customer.FirstName + "+" + this.Customer.LastName) +
+            "&lr=lang_tr&cr=TR",
           headers: {
             ["x-rapidapi-key"]:
               "fe8b5a22fdmshd749bd0abc06febp110dcejsne9594a5d640a",
             ["x-rapidapi-host"]: "google-search3.p.rapidapi.com"
           }
         }).then(res => {
-          console.log(res);
-          debugger;
+          this.customerInfoGoogle = res.data.results;
+          this.customerInfoGoogle.forEach(element => {
+            if (element.link.includes("instagram.com")) {
+              element.imageURL = "media/logos/instagram.png";
+            } else if (element.link.includes("facebook.com")) {
+              element.imageURL = "media/logos/facebook.png";
+            } else if (element.link.includes("twitter.com")) {
+              element.imageURL = "media/logos/twitter.png";
+            } else if (element.link.includes("linkedin.com")) {
+              element.imageURL = "media/logos/linkedin.webp";
+            } else if (element.link.includes("wikipedia.org")) {
+              element.imageURL = "media/logos/wikipedia.png";
+            } else {
+              element.imageURL = "media/logos/google.png";
+            }
+          });
+          this.overlay = false;
         });
       }
     }

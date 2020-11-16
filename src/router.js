@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import ApiService from "./core/services/api.service";
-import { LOGOUT } from "@/core/services/store/auth.module";
 
 Vue.use(Router);
 
@@ -68,13 +67,10 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (!to.meta.allowAnonymous && !ApiService.isLoggedIn()) {
-    this.$store
-      .dispatch(LOGOUT)
-      .then(() => this.$router.push({ name: "login" }));
-    // next({
-    //   path: "/login",
-    //   query: { redirect: to.fullPath }
-    // });
+    next({
+      path: "/login",
+      query: { redirect: to.fullPath }
+    });
   } else {
     next();
   }
