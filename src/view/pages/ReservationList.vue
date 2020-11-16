@@ -17,7 +17,7 @@
           :selected-date="choosenDay"
           :time-from="calendarTimeStart"
           :time-to="calendarTimeEnd"
-          :time-step="90"
+          :time-step="105"
           :disable-views="['years', 'year', 'month', 'week']"
           :events="events"
           :split-days="splitDays"
@@ -170,6 +170,7 @@ import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/tr.js";
 const axios = require("axios").default;
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export default {
   name: "ReservationList",
@@ -253,16 +254,19 @@ export default {
           data: body
         }).then(res => {
           if (res.data.code === 1) {
-            this.$bvToast.toast("Randevu iptali işlemi başarılı olmuştur.", {
-              title: "Bilgilendirme",
-              variant: "info",
-              toaster: "b-toaster-top-center",
-              solid: true
+            Swal.fire({
+              title: "",
+              text: "Randevu kaydı başarıyla sonuçlanmıştır.",
+              icon: "success",
+              timer: 3000
             });
-            this.backupActionsDisable = false;
-            if (res.data.data !== null && res.data.data.length > 0) {
+            if (res.data.data === null) {
+              this.showAppointmentModal = false;
+            } else {
+              this.backupActionsDisable = false;
               this.backupList = res.data.data;
             }
+            this.getDayEvents();
           } else {
             this.$bvToast.toast("Randevu iptali işlemi başarısız olmuştur.", {
               title: "Hata",

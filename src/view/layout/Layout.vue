@@ -54,8 +54,6 @@
             </div>
           </div>
         </div>
-
-        <KTFooter></KTFooter>
       </div>
     </div>
     <KTScrollTop></KTScrollTop>
@@ -66,7 +64,6 @@
 import { mapGetters } from "vuex";
 import KTAside from "@/view/layout/aside/Aside.vue";
 import KTHeaderMobile from "@/view/layout/header/HeaderMobile.vue";
-import KTFooter from "@/view/layout/footer/Footer.vue";
 import HtmlClass from "@/core/services/htmlclass.service";
 import KTSubheader from "@/view/layout/subheader/Subheader.vue";
 import KTScrollTop from "@/view/layout/extras/ScrollTop";
@@ -82,7 +79,6 @@ export default {
   components: {
     KTAside,
     KTHeaderMobile,
-    KTFooter,
     KTSubheader,
     KTScrollTop,
     Loader,

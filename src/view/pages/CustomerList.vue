@@ -82,7 +82,7 @@
                   data-field="BlackListStatus"
                   class="datatable-cell datatable-cell-sort text-center"
                 >
-                  <span style="width: 146px">Müşteri Sadakati</span>
+                  <span style="width: 146px">Sadakat Yıldızı</span>
                 </th>
                 <th
                   data-field="Actions"
@@ -328,7 +328,7 @@
 
               <b-row>
                 <b-col>
-                  <label>Müşteri Sadakati</label>
+                  <label>Sadakat Yıldızı</label>
                   <v-rating
                     length="5"
                     color="#12a293"
@@ -359,6 +359,7 @@
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 const axios = require("axios").default;
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -367,7 +368,7 @@ export default {
       searchForm: "",
       isShowDetailModal: false,
       editCustomer: {},
-      pageSize: 0,
+      pageSize: 1,
       totalPage: 0,
       perPage: 20,
       pageCustomerList: [],
@@ -445,26 +446,26 @@ export default {
         }
       }).then(result => {
         if (result.data.code === 1) {
-          this.$bvToast.toast("Müşteri başarıyla silinmiştir.", {
-            title: "Bilgilendirme",
-            variant: "primary",
-            toaster: "b-toaster-top-center",
-            solid: true
+          Swal.fire({
+            title: "",
+            text: "Müşteri başarıyla silinmiştir.",
+            icon: "success",
+            timer: 3000
           });
           this.getCustomerInfo();
         } else {
-          this.$bvToast.toast("Müşteri silinemedi.", {
-            title: "Bilgilendirme",
-            variant: "warning",
-            toaster: "b-toaster-top-center",
-            solid: true
+          Swal.fire({
+            title: "",
+            text: "Müşteri silinemedi.",
+            icon: "error",
+            timer: 3000
           });
         }
       });
     },
     searchUser() {
       var newUserList = [];
-      this.pageCustomerList.forEach(element => {
+      this.customerList.forEach(element => {
         if (
           element.FirstName.toLowerCase().includes(
             this.searchForm.toLowerCase()
@@ -503,20 +504,20 @@ export default {
         }
       }).then(result => {
         if (result.data.code === 1) {
-          this.$bvToast.toast("Müşteri bilgileri başarıyla güncellenmiştir.", {
-            title: "Bilgilendirme",
-            variant: "primary",
-            toaster: "b-toaster-top-center",
-            solid: true
+          Swal.fire({
+            title: "",
+            text: "Müşteri bilgileri başarıyla güncellenmiştir.",
+            icon: "success",
+            timer: 3000
           });
           this.getCustomerInfo();
           this.isShowDetailModal = false;
         } else {
-          this.$bvToast.toast("Müşteri bilgileri güncellenemedi.", {
-            title: "Bilgilendirme",
-            variant: "warning",
-            toaster: "b-toaster-top-center",
-            solid: true
+          Swal.fire({
+            title: "",
+            text: "Müşteri bilgileri güncellenemedi.",
+            icon: "error",
+            timer: 3000
           });
         }
       });

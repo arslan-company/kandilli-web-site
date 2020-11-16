@@ -293,7 +293,7 @@ export default {
                 this.isShowAlert = true;
                 return;
               } else {
-                this.$router.push({ name: "dashboard" });
+                this.$router.push({ name: "CustomerList" });
               }
             });
 
