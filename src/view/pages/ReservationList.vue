@@ -226,8 +226,6 @@ export default {
       }
     },
     async onCancelAppointment(item, IsBackup) {
-      console.log(item);
-      debugger;
       let body = {};
       if (IsBackup === 1) {
         body = {
