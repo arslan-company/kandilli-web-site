@@ -122,7 +122,7 @@
                     :key="index"
                   >
                     <td aria-colindex="1" role="cell">
-                      {{ item.FullName }}
+                      {{ item.FirstName + " " + item.LastName }}
                     </td>
                     <td aria-colindex="2" role="cell">
                       {{ item.Phone }}
@@ -226,6 +226,8 @@ export default {
       }
     },
     async onCancelAppointment(item, IsBackup) {
+      console.log(item);
+      debugger;
       let body = {};
       if (IsBackup === 1) {
         body = {
@@ -256,14 +258,15 @@ export default {
           if (res.data.code === 1) {
             Swal.fire({
               title: "",
-              text: "Randevu kaydı başarıyla sonuçlanmıştır.",
+              text: "Randevu iptali işlemi başarılı olmuştur.",
               icon: "success",
               timer: 3000
             });
-            if (res.data.data === null) {
+            this.backupActionsDisable = false;
+            if (IsBackup === 0 && item.event.backupList.length === 0) {
               this.showAppointmentModal = false;
-            } else {
-              this.backupActionsDisable = false;
+            }
+            if (res.data.data !== null && res.data.data.length > 0) {
               this.backupList = res.data.data;
             }
             this.getDayEvents();
@@ -280,6 +283,8 @@ export default {
     },
     async onAcceptAppointment(item) {
       if (await this.showModal("Randevu onayı gerçekleştirilecektir.")) {
+        var tablesArray = [];
+        tablesArray[0] = item.TablesId;
         axios({
           method: "post",
           url: "https://kandilliservices.herokuapp.com/AddAppointment",
@@ -297,7 +302,7 @@ export default {
               Appointment: {
                 IsBackup: 0,
                 SessionId: item.SessionId,
-                TablesId: item.TablesId,
+                Tables: tablesArray,
                 Day: moment(item.Day).format("YYYY-MM-DD"),
                 PersonCount: item.PersonCount,
                 Description: item.Description

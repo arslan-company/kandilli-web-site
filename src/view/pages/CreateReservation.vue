@@ -391,6 +391,10 @@
                     </b-col>
                   </b-row>
                 </div>
+                <b-alert variant="warning" show>
+                  'Lütfen randevu saatine önceden geliniz!!' Bilgisini müşteri
+                  ile paylaşın..
+                </b-alert>
               </div>
               <!--end: Wizard Step 3-->
 
