@@ -227,7 +227,6 @@
                         id="PersonCount"
                         v-model="Appointment.PersonCount"
                         type="number"
-                        @change="onSelectedDayPart"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -524,7 +523,14 @@ export default {
     });
 
     // Change event
-    wizard.on("change", function(/*wizardObj*/) {
+    wizard.on("change", data => {
+      if (data.newStep === 2) {
+        if (this.$route.params.isSendFromReservationList) {
+          this.Appointment.Day = this.$route.params.event.day;
+          this.dayPart = this.$route.params.event.dayPartId;
+          this.onSelectedDayPart();
+        }
+      }
       setTimeout(() => {
         KTUtil.scrollTop();
       }, 500);
@@ -626,11 +632,7 @@ export default {
       this.onSelectedDayPart();
     },
     onSelectedDayPart() {
-      if (
-        this.Appointment.Day !== "" &&
-        this.dayPart !== "" &&
-        this.Appointment.PersonCount !== 0
-      ) {
+      if (this.Appointment.Day !== "" && this.dayPart !== "") {
         axios({
           method: "post",
           url:
@@ -692,6 +694,9 @@ export default {
               });
             });
             this.showCalendar = true;
+            if (this.$route.params.isSendFromReservationList) {
+              this.onSelected(this.$route.params.event);
+            }
           }
         });
       }

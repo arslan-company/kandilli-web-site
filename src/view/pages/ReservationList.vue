@@ -180,6 +180,7 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return {
       timeCellHeight: 90,
+      today: moment(today).format("YYYY-MM-DD"),
       choosenDay: moment(today).format("YYYY-MM-DD"),
       splitDays: [],
       events: [],
@@ -190,39 +191,45 @@ export default {
       appointmentInfo: [],
       backupList: [],
       backupActionsDisable: true,
-      showBackupList: false
+      showBackupList: false,
+      currentTimeForMinute: ""
     };
   },
   methods: {
-    Clicklendin(event) {
+    async Clicklendin(event) {
       this.appointmentInfo = [];
       this.backupList = [];
+      this.modalTitle =
+        event.tableInfo + "/" + event.startTime + "-" + event.endTime;
       if (event.fullName !== null || event.backupList.length > 0) {
         this.appointmentInfo.push({
           event
         });
         this.showAppointmentModal = true;
-        this.modalTitle =
-          event.tableInfo +
-          "/" +
-          event.startTime +
-          "-" +
-          event.endTime +
-          " Randevu Detay Bilgileri";
+        this.modalTitle = this.modalTitle + " Randevu Detay Bilgileri";
         if (event.backupList.length > 0) {
           this.backupList = event.backupList;
           this.showBackupList = true;
         }
       } else {
-        this.$bvToast.toast(
-          "Seçtiğiniz randevunun detay bilgisi bulunmamaktadır.",
-          {
+        if (event.isClickable) {
+          if (await this.directCreateReservation(this.modalTitle)) {
+            this.$router.push({
+              name: "CreateReservation",
+              params: {
+                isSendFromReservationList: true,
+                event: event
+              }
+            });
+          }
+        } else {
+          this.$bvToast.toast("Randevu oluşturmaya uygun değildir.", {
             title: "Bilgilendirme",
-            variant: "info",
+            variant: "warning",
             toaster: "b-toaster-top-center",
             solid: true
-          }
-        );
+          });
+        }
       }
     },
     async onCancelAppointment(item, IsBackup) {
@@ -332,6 +339,26 @@ export default {
       this.choosenDay = moment(event.startDate).format("YYYY-MM-DD");
       this.getDayEvents();
     },
+    async directCreateReservation(message) {
+      const h = this.$createElement;
+      const titleVNode = h("div", {
+        domProps: {
+          innerHTML:
+            "<b>" +
+            message +
+            "</b> seans bilgileri için Randevu Oluşturma ekranına yönlendirileceksiniz."
+        }
+      });
+      const value = await this.$bvModal.msgBoxConfirm([titleVNode], {
+        title: "İşlemi onaylıyor musunuz?",
+        okTitle: "Onay",
+        cancelTitle: "İptal",
+        footerClass: "p-2",
+        hideHeaderClose: false,
+        centered: true
+      });
+      return value;
+    },
     async showModal(message) {
       const value = await this.$bvModal.msgBoxConfirm(
         "İşlemi onaylıyor musunuz?",
@@ -366,9 +393,15 @@ export default {
           this.calendarTimeStart = res.data.data.timeFrom;
           this.calendarTimeEnd = res.data.data.timeTo;
           res.data.data.cellList.forEach(el => {
+            var sessionBegin = el.SessionStart;
+            var sessionArray = sessionBegin.split(":");
+            var hour = sessionArray[0];
+            var minute = sessionArray[1];
+            var sessionTotalMinute = parseInt(hour) * 60 + parseInt(minute);
             let sessionClass = "available";
             let title = "";
             let content = "";
+            var isClickable = true;
 
             if (
               el.FullName !== "" &&
@@ -382,6 +415,14 @@ export default {
               sessionClass = "lunch";
             } else if (el.CustomerId !== null) {
               sessionClass = "full";
+            }
+            if (
+              moment(this.choosenDay).isSameOrBefore(this.today) &&
+              this.currentTimeForMinute > sessionTotalMinute &&
+              sessionClass !== "full" &&
+              sessionClass !== "lunch"
+            ) {
+              isClickable = false;
             }
             this.events.push({
               start:
@@ -402,7 +443,9 @@ export default {
               customerId: el.CustomerId,
               tablesId: el.TablesId,
               day: el.Day,
-              content: content
+              content: content,
+              dayPartId: el.DayPartId,
+              isClickable: isClickable
             });
           });
         }
@@ -411,6 +454,12 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Randevu Listeleme" }]);
+
+    const now = new Date();
+    let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+    let minute =
+      now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+    this.currentTimeForMinute = parseInt(hour) * 60 + parseInt(minute);
 
     axios({
       method: "get",
