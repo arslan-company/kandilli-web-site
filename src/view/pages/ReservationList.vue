@@ -78,6 +78,7 @@
                         variant="outline-danger"
                         @click="onCancelAppointment(item, 0)"
                         size="sm"
+                        :disabled="isEditableCancelAppointment"
                       >
                         <i class="far fa-trash-alt"></i> Randevu İptali
                       </b-button>
@@ -192,7 +193,8 @@ export default {
       backupList: [],
       backupActionsDisable: true,
       showBackupList: false,
-      currentTimeForMinute: ""
+      currentTimeForMinute: "",
+      isEditableCancelAppointment: false
     };
   },
   methods: {
@@ -210,6 +212,9 @@ export default {
         if (event.backupList.length > 0) {
           this.backupList = event.backupList;
           this.showBackupList = true;
+        }
+        if (event.isClickable) {
+          this.isEditableCancelAppointment = true;
         }
       } else {
         if (event.isClickable) {
