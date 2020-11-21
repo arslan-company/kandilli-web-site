@@ -213,7 +213,7 @@ export default {
           this.backupList = event.backupList;
           this.showBackupList = true;
         }
-        if (event.isClickable) {
+        if (!event.isClickable) {
           this.isEditableCancelAppointment = true;
         }
       } else {
@@ -422,10 +422,9 @@ export default {
               sessionClass = "full";
             }
             if (
-              moment(this.choosenDay).isSameOrBefore(this.today) &&
-              this.currentTimeForMinute > sessionTotalMinute &&
-              sessionClass !== "full" &&
-              sessionClass !== "lunch"
+              (moment(this.choosenDay).isSameOrBefore(this.today) &&
+                this.currentTimeForMinute > sessionTotalMinute) ||
+              sessionClass === "lunch"
             ) {
               isClickable = false;
             }
@@ -491,13 +490,13 @@ export default {
 }
 
 .vuecal__event-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .vuecal__event-content {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .vuecal__event.full {
