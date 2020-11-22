@@ -56,7 +56,84 @@
                 <h3 class="mb-10 font-weight-bold text-dark">
                   Müşteri Bilgilerini Girin
                 </h3>
-                <v-form ref="wizard1Form" v-model="valid" validation>
+                <!-- <validation-observer ref="observer" v-slot="{ handleSubmit }"> -->
+                <validation-provider
+                  name="Telefon Numarası"
+                  :rules="{ required: true, min: 11, max: 11 }"
+                  v-slot="validationContext"
+                >
+                  <b-row>
+                    <b-col>
+                      <b-form-group label="Telefon Numarası" label-for="Phone">
+                        <b-form-input
+                          id="Phone"
+                          name="Phone"
+                          v-model="Customer.Phone"
+                          type="text"
+                          placeholder="Örnek: 05555555555"
+                          :state="getValidationState(validationContext)"
+                          aria-describedby="PhoneFeedback"
+                          @change="onChangePhone"
+                        ></b-form-input>
+
+                        <b-form-invalid-feedback id="PhoneFeedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </validation-provider>
+                <validation-provider
+                  name="Müşteri Adı"
+                  :rules="{ required: true }"
+                  v-slot="validationContext"
+                >
+                  <b-row>
+                    <b-col>
+                      <b-form-group label="Müşteri Adı" label-for="FirstName">
+                        <b-form-input
+                          id="FirstName"
+                          name="FirstName"
+                          v-model="Customer.FirstName"
+                          type="text"
+                          :state="getValidationState(validationContext)"
+                          aria-describedby="FirstNameFeedback"
+                        ></b-form-input>
+
+                        <b-form-invalid-feedback id="FirstNameFeedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </validation-provider>
+                <validation-provider
+                  name="Müşteri Soyadı"
+                  :rules="{ required: true }"
+                  v-slot="validationContext"
+                >
+                  <b-row>
+                    <b-col>
+                      <b-form-group label="Müşteri Soyadı" label-for="LastName">
+                        <b-form-input
+                          id="LastName"
+                          name="LastName"
+                          v-model="Customer.LastName"
+                          type="text"
+                          :state="getValidationState(validationContext)"
+                          aria-describedby="LastNameFeedback"
+                        ></b-form-input>
+
+                        <b-form-invalid-feedback id="LastNameFeedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </validation-provider>
+                <!-- </validation-observer> -->
+
+                <!-- <v-form ref="wizard1Form" v-model="valid" validation>
                   <v-chip label style="background-color: white">
                     Telefon Numarası
                   </v-chip>
@@ -76,7 +153,6 @@
                     v-model="Customer.FirstName"
                     :rules="nameRules"
                     required
-                    @change="checkCustomerInfo"
                     solo
                   ></v-text-field>
 
@@ -87,10 +163,9 @@
                     v-model="Customer.LastName"
                     :rules="surnameRules"
                     required
-                    @change="checkCustomerInfo"
                     solo
                   ></v-text-field>
-                </v-form>
+                </v-form> -->
 
                 <b-alert variant="danger" :show="isBlackListDanger">
                   Müşteri kara listededir.
@@ -418,7 +493,6 @@
                   <button
                     class="btn btn-primary font-weight-bold text-uppercase px-9 py-4"
                     data-wizard-type="action-next"
-                    :disabled="!valid"
                   >
                     İleri
                   </button>
@@ -460,7 +534,7 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
-      valid: true,
+      // valid: true,
       overlay: false,
       customerInfoGoogle: [],
       phoneRules: [v => !!v || "Telefon Numarası alanı boş olamaz."],
@@ -551,6 +625,9 @@ export default {
     });
   },
   methods: {
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    },
     submit: function() {
       axios({
         method: "post",
