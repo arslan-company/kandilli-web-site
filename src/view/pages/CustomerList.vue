@@ -360,6 +360,8 @@
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 const axios = require("axios").default;
 import Swal from "sweetalert2";
+import JwtService from "@/core/services/jwt.service";
+import decode from "jwt-decode";
 
 export default {
   data() {
@@ -372,7 +374,8 @@ export default {
       totalPage: 0,
       perPage: 20,
       pageCustomerList: [],
-      colorControl: 0
+      colorControl: 0,
+      authToken: {}
     };
   },
   methods: {
@@ -435,33 +438,45 @@ export default {
       }
     },
     onDeleteCustomer(item) {
-      axios({
-        method: "post",
-        url: "https://kandilliservices.herokuapp.com/DeleteCustomer",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        data: {
-          CustomerId: item.CustomerId
-        }
-      }).then(result => {
-        if (result.data.code === 1) {
-          Swal.fire({
-            title: "",
-            text: "Müşteri başarıyla silinmiştir.",
-            icon: "success",
-            timer: 3000
-          });
-          this.getCustomerInfo();
-        } else {
-          Swal.fire({
-            title: "",
-            text: "Müşteri silinemedi.",
-            icon: "error",
-            timer: 3000
-          });
-        }
-      });
+      if (this.authToken.AuthorityList.indexOf("delete_musteri") !== -1) {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/DeleteCustomer",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            CustomerId: item.CustomerId
+          }
+        }).then(result => {
+          if (result.data.code === 1) {
+            Swal.fire({
+              title: "",
+              text: "Müşteri başarıyla silinmiştir.",
+              icon: "success",
+              timer: 3000
+            });
+            this.getCustomerInfo();
+          } else {
+            Swal.fire({
+              title: "",
+              text: "Müşteri silinemedi.",
+              icon: "error",
+              timer: 3000
+            });
+          }
+        });
+      } else {
+        this.$bvToast.toast(
+          "Müşteri bilgilerini silmeye yetkiniz bulunmamaktadır.",
+          {
+            title: "Uyarı",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            solid: true
+          }
+        );
+      }
     },
     searchUser() {
       var newUserList = [];
@@ -482,8 +497,20 @@ export default {
       this.pageCustomerList = newUserList;
     },
     onEditCustomer(item) {
-      this.editCustomer = item;
-      this.isShowDetailModal = true;
+      if (this.authToken.AuthorityList.indexOf("edit_musteri") !== -1) {
+        this.editCustomer = item;
+        this.isShowDetailModal = true;
+      } else {
+        this.$bvToast.toast(
+          "Müşteri bilgilerini değiştirmeye yetkiniz bulunmamaktadır.",
+          {
+            title: "Uyarı",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            solid: true
+          }
+        );
+      }
     },
     saveCustomer() {
       axios({
@@ -533,6 +560,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Müşteri Listeleme" }]);
+    this.authToken = decode(JwtService.getToken());
     this.getCustomerInfo();
   }
 };

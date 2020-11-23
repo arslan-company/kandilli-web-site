@@ -172,6 +172,8 @@ import "vue-cal/dist/i18n/tr.js";
 const axios = require("axios").default;
 import moment from "moment";
 import Swal from "sweetalert2";
+import JwtService from "@/core/services/jwt.service";
+import decode from "jwt-decode";
 
 export default {
   name: "ReservationList",
@@ -194,11 +196,13 @@ export default {
       backupActionsDisable: true,
       showBackupList: false,
       currentTimeForMinute: "",
-      isEditableCancelAppointment: false
+      isEditableCancelAppointment: false,
+      authToken: {}
     };
   },
   methods: {
     async Clicklendin(event) {
+      this.isEditableCancelAppointment = false;
       this.appointmentInfo = [];
       this.backupList = [];
       this.modalTitle =
@@ -213,19 +217,34 @@ export default {
           this.backupList = event.backupList;
           this.showBackupList = true;
         }
-        if (!event.isClickable) {
+        if (
+          !event.isClickable ||
+          this.authToken.AuthorityList.indexOf("cancel_randevu") === -1
+        ) {
           this.isEditableCancelAppointment = true;
         }
       } else {
         if (event.isClickable) {
-          if (await this.directCreateReservation(this.modalTitle)) {
-            this.$router.push({
-              name: "CreateReservation",
-              params: {
-                isSendFromReservationList: true,
-                event: event
+          if (this.authToken.AuthorityList.indexOf("add_randevu") !== -1) {
+            if (await this.directCreateReservation(this.modalTitle)) {
+              this.$router.push({
+                name: "CreateReservation",
+                params: {
+                  isSendFromReservationList: true,
+                  event: event
+                }
+              });
+            }
+          } else {
+            this.$bvToast.toast(
+              "Randevu oluşturmaya yetkiniz bulunmamaktadır.",
+              {
+                title: "Uyarı",
+                variant: "danger",
+                toaster: "b-toaster-top-center",
+                solid: true
               }
-            });
+            );
           }
         } else {
           this.$bvToast.toast("Randevu oluşturmaya uygun değildir.", {
@@ -458,6 +477,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Randevu Listeleme" }]);
+    this.authToken = decode(JwtService.getToken());
 
     const now = new Date();
     let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
