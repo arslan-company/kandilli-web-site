@@ -98,6 +98,7 @@
                           type="text"
                           :state="getValidationState(validationContext)"
                           aria-describedby="FirstNameFeedback"
+                          @change="checkCustomerInfo"
                         ></b-form-input>
 
                         <b-form-invalid-feedback id="FirstNameFeedback">
@@ -122,6 +123,7 @@
                           type="text"
                           :state="getValidationState(validationContext)"
                           aria-describedby="LastNameFeedback"
+                          @change="checkCustomerInfo"
                         ></b-form-input>
 
                         <b-form-invalid-feedback id="LastNameFeedback">
@@ -534,7 +536,6 @@ export default {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(today);
     return {
-      // valid: true,
       overlay: false,
       customerInfoGoogle: [],
       phoneRules: [v => !!v || "Telefon Numarası alanı boş olamaz."],
