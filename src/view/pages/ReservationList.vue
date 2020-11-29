@@ -54,6 +54,9 @@
                       <div>Kişi Sayısı</div>
                     </th>
                     <th role="columnheader" scope="col" aria-colindex="4">
+                      <div>Müşteri Notu</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="5">
                       <div>İşlem</div>
                     </th>
                   </tr>
@@ -73,7 +76,10 @@
                     <td aria-colindex="3" role="cell">
                       {{ item.event.personCount }}
                     </td>
-                    <td aria-colindex="3" role="cell">
+                    <td aria-colindex="4" role="cell">
+                      {{ item.event.description }}
+                    </td>
+                    <td aria-colindex="5" role="cell">
                       <b-button
                         variant="outline-danger"
                         @click="onCancelAppointment(item, 0)"
@@ -112,6 +118,9 @@
                       <div>Kişi Sayısı</div>
                     </th>
                     <th role="columnheader" scope="col" aria-colindex="4">
+                      <div>Müşteri Notu</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="5">
                       <div>Randevu İşlemi</div>
                     </th>
                   </tr>
@@ -131,7 +140,10 @@
                     <td aria-colindex="3" role="cell">
                       {{ item.PersonCount }}
                     </td>
-                    <td aria-colindex="3" role="cell">
+                    <td aria-colindex="4" role="cell">
+                      {{ item.Description }}
+                    </td>
+                    <td aria-colindex="5" role="cell">
                       <b-button
                         variant="outline-success"
                         @click="onAcceptAppointment(item)"
@@ -468,7 +480,8 @@ export default {
               day: el.Day,
               content: content,
               dayPartId: el.DayPartId,
-              isClickable: isClickable
+              isClickable: isClickable,
+              description: el.Description
             });
           });
         }
