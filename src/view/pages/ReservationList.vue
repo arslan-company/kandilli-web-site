@@ -83,12 +83,12 @@
                       {{ item.event.description }}
                     </td>
                     <td aria-colindex="5" role="cell">
-                      {{ item.event.systemDate }}
+                      {{ item.event.systemDate | formatDate }}
                     </td>
                     <td aria-colindex="6" role="cell">
                       <b-button
                         variant="outline-danger"
-                        @click="onCancelAppointment(item, 0)"
+                        @click="onClickDelete(item)"
                         size="sm"
                         :disabled="isEditableCancelAppointment"
                       >
@@ -182,6 +182,44 @@
             <div class="w-100"></div>
           </template>
         </b-modal>
+
+        <b-modal v-model="isShowDeleteReservationModal" title="Müşteri Detayı">
+          <b-container fluid>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  label="Randevu İptali Sebebi"
+                  label-for="cancelReservationReason"
+                >
+                  <b-form-select
+                    id="cancelReservationReason"
+                    v-model="cancelReservationReason"
+                    :options="cancelReservationReasonList"
+                  ></b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-container>
+
+          <template v-slot:modal-footer>
+            <div class="w-100">
+              <b-button
+                variant="primary"
+                style="float:right;margin-left:5px;"
+                @click="onCancelAppointment(deleteObject, 0)"
+              >
+                Onay
+              </b-button>
+              <b-button
+                variant="secondary"
+                style="float:right"
+                @click="isShowDeleteReservationModal = false"
+              >
+                İptal
+              </b-button>
+            </div>
+          </template>
+        </b-modal>
       </div>
     </div>
   </div>
@@ -198,6 +236,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import JwtService from "@/core/services/jwt.service";
 import decode from "jwt-decode";
+import Vue from "vue";
 
 export default {
   name: "ReservationList",
@@ -214,6 +253,7 @@ export default {
       calendarTimeStart: 0,
       calendarTimeEnd: 0,
       showAppointmentModal: false,
+      isShowDeleteReservationModal: false,
       modalTitle: "",
       appointmentInfo: [],
       backupList: [],
@@ -221,7 +261,27 @@ export default {
       showBackupList: false,
       currentTimeForMinute: "",
       isEditableCancelAppointment: false,
-      authToken: {}
+      authToken: {},
+      deleteObject: {},
+      cancelReservationReason: 0,
+      cancelReservationReasonList: [
+        {
+          value: 0,
+          text: "Sebepsiz"
+        },
+        {
+          value: 1,
+          text: "Müşteri randevu iptali istedi"
+        },
+        {
+          value: 2,
+          text: "Randevuya geç geldi"
+        },
+        {
+          value: 3,
+          text: "Randevuya gelmedi"
+        }
+      ]
     };
   },
   methods: {
@@ -298,43 +358,44 @@ export default {
           CustomerId: item.event.customerId,
           SessionId: item.event.sessionId,
           TablesId: item.event.tablesId,
-          Day: item.event.day
+          Day: item.event.day,
+          CancelReasonId: this.cancelReservationReason
         };
       }
-      if (await this.showModal("Randevu iptali gerçekleştirilecektir.")) {
-        axios({
-          method: "post",
-          url: "https://kandilliservices.herokuapp.com/CancelAppointment",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          data: body
-        }).then(res => {
-          if (res.data.code === 1) {
-            Swal.fire({
-              title: "",
-              text: "Randevu iptali işlemi başarılı olmuştur.",
-              icon: "success",
-              timer: 3000
-            });
-            this.backupActionsDisable = false;
-            if (IsBackup === 0 && item.event.backupList.length === 0) {
-              this.showAppointmentModal = false;
-            }
-            if (res.data.data !== null && res.data.data.length > 0) {
-              this.backupList = res.data.data;
-            }
-            this.getDayEvents();
-          } else {
-            this.$bvToast.toast("Randevu iptali işlemi başarısız olmuştur.", {
-              title: "Hata",
-              variant: "danger",
-              toaster: "b-toaster-top-center",
-              solid: true
-            });
+      this.cancelReservationReason = 0;
+      axios({
+        method: "post",
+        url: "https://kandilliservices.herokuapp.com/CancelAppointment",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: body
+      }).then(res => {
+        if (res.data.code === 1) {
+          Swal.fire({
+            title: "",
+            text: "Randevu iptali işlemi başarılı olmuştur.",
+            icon: "success",
+            timer: 3000
+          });
+          this.backupActionsDisable = false;
+          if (IsBackup === 0 && item.event.backupList.length === 0) {
+            this.showAppointmentModal = false;
           }
-        });
-      }
+          if (res.data.data !== null && res.data.data.length > 0) {
+            this.backupList = res.data.data;
+          }
+          this.getDayEvents();
+        } else {
+          this.$bvToast.toast("Randevu iptali işlemi başarısız olmuştur.", {
+            title: "Hata",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
+        }
+        this.isShowDeleteReservationModal = false;
+      });
     },
     async onAcceptAppointment(item) {
       if (await this.showModal("Randevu onayı gerçekleştirilecektir.")) {
@@ -391,6 +452,26 @@ export default {
       this.getDayEvents();
     },
     async directCreateReservation(message) {
+      const h = this.$createElement;
+      const titleVNode = h("div", {
+        domProps: {
+          innerHTML:
+            "<b>" +
+            message +
+            "</b> seans bilgileri için Randevu Oluşturma ekranına yönlendirileceksiniz."
+        }
+      });
+      const value = await this.$bvModal.msgBoxConfirm([titleVNode], {
+        title: "İşlemi onaylıyor musunuz?",
+        okTitle: "Onay",
+        cancelTitle: "İptal",
+        footerClass: "p-2",
+        hideHeaderClose: false,
+        centered: true
+      });
+      return value;
+    },
+    async deleteShowModal(message) {
       const h = this.$createElement;
       const titleVNode = h("div", {
         domProps: {
@@ -502,6 +583,10 @@ export default {
           });
         }
       });
+    },
+    onClickDelete(item) {
+      this.isShowDeleteReservationModal = true;
+      this.deleteObject = item;
     }
   },
   mounted() {
@@ -527,6 +612,10 @@ export default {
         });
       }
       this.getDayEvents();
+    });
+
+    Vue.filter("formatDate", function(value) {
+      return moment(value).format("DD.MM.yyyy");
     });
   }
 };

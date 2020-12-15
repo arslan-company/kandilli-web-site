@@ -133,41 +133,6 @@
                     </b-col>
                   </b-row>
                 </validation-provider>
-                <!-- </validation-observer> -->
-
-                <!-- <v-form ref="wizard1Form" v-model="valid" validation>
-                  <v-chip label style="background-color: white">
-                    Telefon Numarası
-                  </v-chip>
-                  <v-text-field
-                    solo
-                    v-model="Customer.Phone"
-                    :rules="phoneRules"
-                    placeholder="Örnek: 05555555555"
-                    @change="onChangePhone"
-                    required
-                  ></v-text-field>
-
-                  <v-chip label style="background-color: white">
-                    Müşteri Adı
-                  </v-chip>
-                  <v-text-field
-                    v-model="Customer.FirstName"
-                    :rules="nameRules"
-                    required
-                    solo
-                  ></v-text-field>
-
-                  <v-chip label style="background-color: white">
-                    Müşteri Soyadı
-                  </v-chip>
-                  <v-text-field
-                    v-model="Customer.LastName"
-                    :rules="surnameRules"
-                    required
-                    solo
-                  ></v-text-field>
-                </v-form> -->
 
                 <b-alert variant="danger" :show="isBlackListDanger">
                   Müşteri kara listededir.
