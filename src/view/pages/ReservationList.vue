@@ -40,7 +40,7 @@
                 role="table"
                 aria-busy="false"
                 aria-colcount="10"
-                class="table b-table table-striped table-bordered b-table-fixed"
+                class="table b-table table-striped table-bordered"
               >
                 <thead role="rowgroup">
                   <tr role="row">
@@ -57,6 +57,9 @@
                       <div>Müşteri Notu</div>
                     </th>
                     <th role="columnheader" scope="col" aria-colindex="5">
+                      <div>Randevu Kayıt Tarihi</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="6">
                       <div>İşlem</div>
                     </th>
                   </tr>
@@ -80,6 +83,9 @@
                       {{ item.event.description }}
                     </td>
                     <td aria-colindex="5" role="cell">
+                      {{ item.event.systemDate }}
+                    </td>
+                    <td aria-colindex="6" role="cell">
                       <b-button
                         variant="outline-danger"
                         @click="onCancelAppointment(item, 0)"
@@ -104,7 +110,7 @@
                 role="table"
                 aria-busy="false"
                 aria-colcount="10"
-                class="table b-table table-striped table-bordered b-table-fixed"
+                class="table b-table table-striped table-bordered"
               >
                 <thead role="rowgroup">
                   <tr role="row">
@@ -119,6 +125,9 @@
                     </th>
                     <th role="columnheader" scope="col" aria-colindex="4">
                       <div>Müşteri Notu</div>
+                    </th>
+                    <th role="columnheader" scope="col" aria-colindex="4">
+                      <div>Randevu Kayıt Tarihi</div>
                     </th>
                     <th role="columnheader" scope="col" aria-colindex="5">
                       <div>Randevu İşlemi</div>
@@ -144,6 +153,9 @@
                       {{ item.Description }}
                     </td>
                     <td aria-colindex="5" role="cell">
+                      {{ item.SystemDate }}
+                    </td>
+                    <td aria-colindex="6" role="cell">
                       <b-button
                         variant="outline-success"
                         @click="onAcceptAppointment(item)"
@@ -228,6 +240,8 @@ export default {
         if (event.backupList.length > 0) {
           this.backupList = event.backupList;
           this.showBackupList = true;
+        } else {
+          this.showBackupList = false;
         }
         if (
           !event.isClickable ||
@@ -346,7 +360,8 @@ export default {
                 Tables: tablesArray,
                 Day: moment(item.Day).format("YYYY-MM-DD"),
                 PersonCount: item.PersonCount,
-                Description: item.Description
+                Description: item.Description,
+                SystemDate: item.SystemDate
               }
             }
           }
@@ -481,7 +496,8 @@ export default {
               content: content,
               dayPartId: el.DayPartId,
               isClickable: isClickable,
-              description: el.Description
+              description: el.Description,
+              systemDate: el.SystemDate
             });
           });
         }
