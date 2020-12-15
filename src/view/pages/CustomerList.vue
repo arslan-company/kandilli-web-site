@@ -335,7 +335,18 @@
                     v-model="editCustomer.BlackListPoint"
                   ></v-rating>
                 </b-col>
-                <b-col></b-col>
+                <b-col>
+                  <b-form-group
+                    label="Müşteri Notu:"
+                    label-for="NoteForCustomer"
+                  >
+                    <b-form-textarea
+                      id="NoteForCustomer"
+                      v-model="editCustomer.Note"
+                      type="text"
+                    ></b-form-textarea>
+                  </b-form-group>
+                </b-col>
               </b-row>
             </b-container>
 
@@ -527,7 +538,8 @@ export default {
           Mail: this.editCustomer.Mail,
           BlackListPoint: this.editCustomer.BlackListPoint,
           BirthDay: this.editCustomer.BirthDay,
-          AnniversaryDay: this.editCustomer.AnniversaryDay
+          AnniversaryDay: this.editCustomer.AnniversaryDay,
+          Note: this.editCustomer.Note
         }
       }).then(result => {
         if (result.data.code === 1) {
