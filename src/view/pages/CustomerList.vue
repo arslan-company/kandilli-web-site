@@ -101,7 +101,11 @@
                 v-for="(item, index) in pageCustomerList"
                 :key="index"
               >
-                <td class="datatable-cell datatable-toggle-detail">
+                <td
+                  class="datatable-cell datatable-toggle-detail"
+                  style="cursor:pointer;"
+                  @click="onListLastTenAppointment(item)"
+                >
                   <i class="fa fa-caret-right"></i>
                 </td>
                 <td data-field="CustomerInfo" class="datatable-cell">
@@ -361,6 +365,91 @@
               </div>
             </template>
           </b-modal>
+          <b-modal
+            v-model="isShowListTenAppointment"
+            size="xl"
+            title="Müşterinin Son 10 Randevu Detayı"
+          >
+            <b-container fluid>
+              <table
+                role="table"
+                aria-busy="false"
+                class="table b-table table-striped table-hover"
+              >
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th
+                      role="columnheader"
+                      scope="col"
+                      aria-colindex="1"
+                      class="text-center"
+                    >
+                      <div>Randevu Tarihi</div>
+                    </th>
+                    <th
+                      role="columnheader"
+                      scope="col"
+                      aria-colindex="2"
+                      class="text-center"
+                    >
+                      <div>Randevu Alınma Tarihi</div>
+                    </th>
+                    <th
+                      role="columnheader"
+                      scope="col"
+                      aria-colindex="3"
+                      class="text-center"
+                    >
+                      <div>Kişi Sayısı</div>
+                    </th>
+                    <th
+                      role="columnheader"
+                      scope="col"
+                      aria-colindex="4"
+                      class="text-center"
+                    >
+                      <div>Randevu Durumu</div>
+                    </th>
+                    <th
+                      role="columnheader"
+                      scope="col"
+                      aria-colindex="5"
+                      class="text-center"
+                    >
+                      <div>Randevu İptali Sebebi</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody role="rowgroup">
+                  <tr
+                    role="row"
+                    v-for="(item, index) in lastTenAppointment"
+                    :key="index"
+                  >
+                    <td aria-colindex="1" role="cell" class="text-center">
+                      {{ item.Day | formatDate }}
+                    </td>
+                    <td aria-colindex="2" role="cell" class="text-center">
+                      {{ item.SystemDate | formatDate }}
+                    </td>
+                    <td aria-colindex="3" role="cell" class="text-center">
+                      {{ item.PersonCount }}
+                    </td>
+                    <td aria-colindex="4" role="cell" class="text-center">
+                      {{ item.Status }}
+                    </td>
+                    <td aria-colindex="5" role="cell" class="text-center">
+                      {{ item.CancelReason }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </b-container>
+
+            <template v-slot:modal-footer>
+              <div class="w-100"></div>
+            </template>
+          </b-modal>
         </div>
       </div>
     </div>
@@ -373,6 +462,8 @@ const axios = require("axios").default;
 import Swal from "sweetalert2";
 import JwtService from "@/core/services/jwt.service";
 import decode from "jwt-decode";
+import moment from "moment";
+import Vue from "vue";
 
 export default {
   data() {
@@ -386,7 +477,9 @@ export default {
       perPage: 20,
       pageCustomerList: [],
       colorControl: 0,
-      authToken: {}
+      authToken: {},
+      isShowListTenAppointment: false,
+      lastTenAppointment: []
     };
   },
   methods: {
@@ -568,12 +661,20 @@ export default {
           this.pageSize * this.perPage
         );
       }
+    },
+    onListLastTenAppointment(item) {
+      this.lastTenAppointment = item.LastTenAppointment;
+      this.isShowListTenAppointment = true;
     }
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Müşteri Listeleme" }]);
     this.authToken = decode(JwtService.getToken());
     this.getCustomerInfo();
+
+    Vue.filter("formatDate", function(value) {
+      return moment(value).format("DD.MM.yyyy");
+    });
   }
 };
 </script>
