@@ -595,7 +595,7 @@ export default {
           Phone: el.Phone,
           AppointmentCount: el.AppointmentCount,
           BlackListPoint: el.BlackListPoint,
-          img: "media/svg/avatars/043-boy-18.svg"
+          img: "media/043-boy-18.svg"
         });
       });
     },
@@ -770,7 +770,7 @@ export default {
           Phone: el.Phone,
           AppointmentCount: el.AppointmentCount,
           BlackListPoint: el.BlackListPoint,
-          img: "media/svg/avatars/043-boy-18.svg"
+          img: "media/043-boy-18.svg"
         });
       });
     }

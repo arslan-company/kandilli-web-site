@@ -877,17 +877,17 @@ export default {
           this.customerInfoGoogle = res.data.results;
           this.customerInfoGoogle.forEach(element => {
             if (element.link.includes("instagram.com")) {
-              element.imageURL = "media/logos/instagram.png";
+              element.imageURL = "media/instagram.png";
             } else if (element.link.includes("facebook.com")) {
-              element.imageURL = "media/logos/facebook.png";
+              element.imageURL = "media/facebook.png";
             } else if (element.link.includes("twitter.com")) {
-              element.imageURL = "media/logos/twitter.png";
+              element.imageURL = "media/twitter.png";
             } else if (element.link.includes("linkedin.com")) {
-              element.imageURL = "media/logos/linkedin.webp";
+              element.imageURL = "media/linkedin.webp";
             } else if (element.link.includes("wikipedia.org")) {
-              element.imageURL = "media/logos/wikipedia.png";
+              element.imageURL = "media/wikipedia.png";
             } else {
-              element.imageURL = "media/logos/google.png";
+              element.imageURL = "media/google.png";
             }
           });
           this.overlay = false;
