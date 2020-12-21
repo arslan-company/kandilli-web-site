@@ -138,33 +138,6 @@
         "fixed": false
     },
     "extras": {
-        "search": {
-            "display": false,
-            "layout": "offcanvas",
-            "offcanvas": {
-                "direction": "left"
-            }
-        },
-        "notifications": {
-            "display": false,
-            "layout": "offcanvas",
-            "dropdown": {
-                "style": "dark"
-            },
-            "offcanvas": {
-                "direction": "left"
-            }
-        },
-        "quick-actions": {
-            "display": true,
-            "layout": "offcanvas",
-            "dropdown": {
-                "style": "dark"
-            },
-            "offcanvas": {
-                "direction": "left"
-            }
-        },
         "cart": {
             "display": false,
             "layout": "dropdown",
@@ -187,12 +160,6 @@
         },
         "languages": {
             "display": false
-        },
-        "quick-panel": {
-            "display": true,
-            "offcanvas": {
-                "direction": "left"
-            }
         },
         "toolbar": {
             "display": true

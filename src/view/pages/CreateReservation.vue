@@ -186,11 +186,93 @@
                     </div>
                   </div>
                 </div>
+                <div :hidden="customerInfoDetail" style="margin-top:70px;">
+                  <h5>Müşteriye Ait Son 10 Randevu Detayı</h5>
+                  <hr />
+                  <table
+                    role="table"
+                    aria-busy="false"
+                    class="table b-table table-striped table-hover"
+                  >
+                    <thead role="rowgroup">
+                      <tr role="row">
+                        <th
+                          role="columnheader"
+                          scope="col"
+                          aria-colindex="1"
+                          class="text-center"
+                        >
+                          <div>Randevu Tarihi</div>
+                        </th>
+                        <th
+                          role="columnheader"
+                          scope="col"
+                          aria-colindex="2"
+                          class="text-center"
+                        >
+                          <div>Randevu Alınma Tarihi</div>
+                        </th>
+                        <th
+                          role="columnheader"
+                          scope="col"
+                          aria-colindex="3"
+                          class="text-center"
+                        >
+                          <div>Kişi Sayısı</div>
+                        </th>
+                        <th
+                          role="columnheader"
+                          scope="col"
+                          aria-colindex="4"
+                          class="text-center"
+                        >
+                          <div>Randevu Durumu</div>
+                        </th>
+                        <th
+                          role="columnheader"
+                          scope="col"
+                          aria-colindex="5"
+                          class="text-center"
+                        >
+                          <div>Randevu İptali Sebebi</div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                      <tr
+                        role="row"
+                        v-for="(item, index) in lastTenAppointment"
+                        :key="index"
+                      >
+                        <td aria-colindex="1" role="cell" class="text-center">
+                          {{ item.Day | formatDate }}
+                        </td>
+                        <td aria-colindex="2" role="cell" class="text-center">
+                          {{ item.SystemDate | formatDate }}
+                        </td>
+                        <td aria-colindex="3" role="cell" class="text-center">
+                          {{ item.PersonCount }}
+                        </td>
+                        <td aria-colindex="4" role="cell" class="text-center">
+                          {{ item.Status }}
+                        </td>
+                        <td aria-colindex="5" role="cell" class="text-center">
+                          {{ item.CancelReason }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style="margin-top:70px;" :hidden="customerInfoDetail">
+                  <h5>Müşteri Bilgileri</h5>
+                  <hr />
+                </div>
                 <div class="row">
                   <div
                     v-for="(item, index) in customerInfoGoogle"
                     :key="index"
-                    class="col-xl-3"
+                    class="col-xl-4"
                   >
                     <div class="card card-custom gutter-b card-stretch">
                       <div class="card-body">
@@ -502,6 +584,7 @@ export default {
     const minDate = new Date(today);
     return {
       overlay: false,
+      lastTenAppointment: [],
       customerInfoGoogle: [],
       phoneRules: [v => !!v || "Telefon Numarası alanı boş olamaz."],
       nameRules: [v => !!v || "Müşteri Adı boş olamaz."],
@@ -766,10 +849,12 @@ export default {
           this.customerInfoDetail = true;
           if (res.data.data !== null) {
             this.Customer = res.data.data.customer;
+            this.lastTenAppointment = res.data.data.lastTenAppointment;
             this.customerInfoDetail = false;
             if (this.Customer.BlackListPoint < 3) {
               this.isBlackListDanger = true;
             }
+            this.checkCustomerInfo();
           }
         });
       }

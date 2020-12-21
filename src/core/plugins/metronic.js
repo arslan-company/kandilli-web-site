@@ -64,26 +64,5 @@ window.KTLayoutChat = KTLayoutChat;
 import KTLayoutExamples from "@/assets/js/layout/extended/examples.js";
 window.KTLayoutExamples = KTLayoutExamples;
 
-import KTLayoutQuickActions from "@/assets/js/layout/extended/quick-actions.js";
-window.KTLayoutQuickActions = KTLayoutQuickActions;
-
-import KTLayoutQuickCartPanel from "@/assets/js/layout/extended/quick-cart.js";
-window.KTLayoutQuickCartPanel = KTLayoutQuickCartPanel;
-
-import KTLayoutQuickNotifications from "@/assets/js/layout/extended/quick-notifications.js";
-window.KTLayoutQuickNotifications = KTLayoutQuickNotifications;
-
-import KTLayoutQuickPanel from "@/assets/js/layout/extended/quick-panel.js";
-window.KTLayoutQuickPanel = KTLayoutQuickPanel;
-
-import KTLayoutQuickSearch from "@/assets/js/layout/extended/quick-search.js";
-window.KTLayoutQuickSearch = KTLayoutQuickSearch;
-
-import KTLayoutQuickUser from "@/assets/js/layout/extended/quick-user.js";
-window.KTLayoutQuickUser = KTLayoutQuickUser;
-
 import KTLayoutScrolltop from "@/assets/js/layout/extended/scrolltop.js";
 window.KTLayoutScrolltop = KTLayoutScrolltop;
-
-import KTLayoutSearch from "@/assets/js/layout/extended/search.js";
-window.KTLayoutSearch = KTLayoutSearch;
