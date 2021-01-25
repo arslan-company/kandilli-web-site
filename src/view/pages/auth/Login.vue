@@ -203,7 +203,7 @@ export default {
     ...mapGetters(["currentUser"]),
 
     backgroundImage() {
-      return process.env.BASE_URL + "media/svg/illustrations/working.svg";
+      return process.env.BASE_URL + "media/working.svg";
     }
   },
   mounted() {
