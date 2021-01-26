@@ -739,9 +739,12 @@ export default {
             event.sessionId === this.Appointment.SessionId &&
             event.split === this.Appointment.Tables[0]
         );
-        selected.class = "selected";
-        selected.title = this.Customer.FirstName + " " + this.Customer.LastName;
-        selected.content = `Tel: ${this.Customer.Phone} <br> Kişi Sayısı: ${this.Appointment.PersonCount}`;
+        if (selected !== undefined) {
+          selected.class = "selected";
+          selected.title =
+            this.Customer.FirstName + " " + this.Customer.LastName;
+          selected.content = `Tel: ${this.Customer.Phone} <br> Kişi Sayısı: ${this.Appointment.PersonCount}`;
+        }
       }
     },
     async showModal(backupCount) {
@@ -829,6 +832,15 @@ export default {
             this.showCalendar = true;
             if (this.$route.params.isSendFromReservationList) {
               this.onSelected(this.$route.params.event);
+            } else {
+              const event = this.events.find(
+                event =>
+                  event.sessionId === this.Appointment.SessionId &&
+                  event.split === this.Appointment.Tables[0]
+              );
+              if (event !== undefined) {
+                this.onSelected(event);
+              }
             }
           }
         });
