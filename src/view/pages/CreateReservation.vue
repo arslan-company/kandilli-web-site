@@ -331,6 +331,7 @@
                       :min="min"
                       placeholder=""
                       @input="onSelectedDayPart"
+                      locale="tr"
                     ></b-form-datepicker>
                   </b-col>
                   <b-col>
@@ -351,6 +352,7 @@
                         id="PersonCount"
                         v-model="Appointment.PersonCount"
                         type="number"
+                        @change="onSelectedDayPart"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -391,7 +393,6 @@
               <div class="pb-5" data-wizard-type="step-content">
                 <div class="position-absolute opacity-30">
                   <span class="svg-icon svg-icon-10x svg-logo-white">
-                    <!--begin::Svg Icon | path:/metronic/theme/html/demo3/dist/assets/media/svg/shapes/abstract-8.svg-->
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="176"
@@ -430,7 +431,6 @@
                         ></path>
                       </g>
                     </svg>
-                    <!--end::Svg Icon-->
                   </span>
                 </div>
                 <div
@@ -571,6 +571,7 @@ import Swal from "sweetalert2";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/tr.js";
+import Vue from "vue";
 
 const axios = require("axios").default;
 import moment from "moment";
@@ -645,6 +646,10 @@ export default {
       clickableSteps: false
     });
 
+    Vue.filter("formatDate", function(value) {
+      return moment(value).format("DD.MM.yyyy");
+    });
+
     // Change event
     wizard.on("change", data => {
       if (data.newStep === 2) {
@@ -697,7 +702,11 @@ export default {
           icon: "success"
         });
         this.$router.push({
-          name: "ReservationList"
+          name: "ReservationList",
+          params: {
+            isSendFromCreateReservation: true,
+            day: this.Appointment.Day
+          }
         });
       });
     },
@@ -710,7 +719,7 @@ export default {
               event.split === this.Appointment.Tables[0]
           );
 
-          if (prevSelected.class !== "full") {
+          if (prevSelected !== undefined && prevSelected.class !== "full") {
             prevSelected.class = "available";
             prevSelected.title = "";
             prevSelected.content = "";
@@ -737,9 +746,7 @@ export default {
     },
     async showModal(backupCount) {
       const value = await this.$bvModal.msgBoxConfirm(
-        "Seçilen seans aralığında " +
-          backupCount +
-          " kişi yedek listesindedir. İşlemi onaylıyor musunuz?",
+        `Seçilen seans aralığında ${backupCount} kişi yedek listesindedir. İşlemi onaylıyor musunuz?`,
         {
           title: "Seans dolu olduğu için yedek listeye kayıt edilecektir.",
           okTitle: "Onay",

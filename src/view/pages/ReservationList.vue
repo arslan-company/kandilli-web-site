@@ -590,6 +590,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.params.isSendFromCreateReservation) {
+      this.choosenDay = this.$route.params.day;
+    }
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Randevu Listeleme" }]);
     this.authToken = decode(JwtService.getToken());
 
