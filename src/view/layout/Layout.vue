@@ -160,6 +160,6 @@ export default {
 
 <style scoped>
 .flex-column-fluid {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 </style>

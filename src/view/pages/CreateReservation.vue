@@ -515,8 +515,8 @@
                   </b-row>
                 </div>
                 <b-alert variant="warning" show>
-                  'Lütfen randevu saatine önceden geliniz!!' Bilgisini müşteri
-                  ile paylaşın..
+                  Müşterilerimize randevu saatine ve randevu kurallarına
+                  uymaları gerektiğini hatırlatınız.
                 </b-alert>
               </div>
               <!--end: Wizard Step 3-->
