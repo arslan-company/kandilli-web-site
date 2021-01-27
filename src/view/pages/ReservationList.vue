@@ -9,6 +9,8 @@
               id="Day"
               v-model="choosenDay"
               class="mb-8"
+              locale="tr"
+              :hide-header="true"
             ></b-form-datepicker>
           </b-col>
           <b-col></b-col>

@@ -1,14 +1,12 @@
 <template>
   <div class="card card-custom">
     <div class="card-body p-0">
-      <!--begin: Wizard-->
       <div
         class="wizard wizard-1"
         id="kt_wizard_v1"
         data-wizard-state="step-first"
         data-wizard-clickable="true"
       >
-        <!--begin: Wizard Nav-->
         <div class="wizard-nav border-bottom">
           <div class="wizard-steps p-8 p-lg-10">
             <div
@@ -40,14 +38,10 @@
             </div>
           </div>
         </div>
-        <!--end: Wizard Nav-->
 
-        <!--begin: Wizard Body-->
         <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
           <div class="col-xl-12 col-xxl-10">
-            <!--begin: Wizard Form-->
             <form class="form" id="kt_form">
-              <!--begin: Wizard Step 1-->
               <div
                 class="pb-5"
                 data-wizard-type="step-content"
@@ -56,7 +50,6 @@
                 <h3 class="mb-10 font-weight-bold text-dark">
                   Müşteri Bilgilerini Girin
                 </h3>
-                <!-- <validation-observer ref="observer" v-slot="{ handleSubmit }"> -->
                 <validation-provider
                   name="Telefon Numarası"
                   :rules="{ required: true, min: 11, max: 11 }"
@@ -306,9 +299,7 @@
                   ></v-progress-circular>
                 </v-overlay>
               </div>
-              <!--end: Wizard Step 1-->
 
-              <!--begin: Wizard Step 2-->
               <div class="pb-5" data-wizard-type="step-content">
                 <h4 class="mb-10 font-weight-bold text-dark">
                   Rezervasyon Bilgilerini Girin
@@ -332,6 +323,7 @@
                       placeholder=""
                       @input="onSelectedDayPart"
                       locale="tr"
+                      :hide-header="true"
                     ></b-form-datepicker>
                   </b-col>
                   <b-col>
@@ -387,9 +379,7 @@
                 >
                 </vue-cal>
               </div>
-              <!--end: Wizard Step 2-->
 
-              <!--begin: Wizard Step 3-->
               <div class="pb-5" data-wizard-type="step-content">
                 <div class="position-absolute opacity-30">
                   <span class="svg-icon svg-icon-10x svg-logo-white">
@@ -519,9 +509,7 @@
                   uymaları gerektiğini hatırlatınız.
                 </b-alert>
               </div>
-              <!--end: Wizard Step 3-->
 
-              <!--begin: Wizard Actions -->
               <div class="d-flex justify-content-between border-top pt-10">
                 <div class="mr-2">
                   <button
@@ -547,15 +535,11 @@
                   </button>
                 </div>
               </div>
-              <!--end: Wizard Actions -->
             </form>
-            <!--end: Wizard Form-->
           </div>
         </div>
-        <!--end: Wizard Body-->
       </div>
     </div>
-    <!--end: Wizard-->
   </div>
 </template>
 

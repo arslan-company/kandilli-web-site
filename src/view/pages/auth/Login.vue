@@ -9,7 +9,6 @@
       }"
       id="kt_login"
     >
-      <!--begin::Aside-->
       <div
         class="login-aside d-flex flex-column flex-row-auto"
         style="background-color: #F2C98A;"
@@ -31,13 +30,10 @@
           :style="{ backgroundImage: `url(${backgroundImage})` }"
         ></div>
       </div>
-      <!--begin::Aside-->
-      <!--begin::Content-->
       <div
         class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto"
       >
         <div class="d-flex flex-column-fluid flex-center">
-          <!--begin::Signin-->
           <div class="login-form login-signin">
             <form
               class="form"
@@ -78,12 +74,6 @@
                   <label class="font-size-h6 font-weight-bolder text-dark pt-5"
                     >Şifre</label
                   >
-                  <a
-                    class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5"
-                    id="kt_login_forgot"
-                    @click="showForm('forgot')"
-                    >Şifreyi mi Unuttunuz ?</a
-                  >
                 </div>
                 <div
                   id="example-input-group-2"
@@ -110,63 +100,12 @@
               </div>
             </form>
           </div>
-          <!--end::Signin-->
-          <!--begin::Forgot-->
-          <div class="login-form login-forgot">
-            <!--begin::Form-->
-            <form
-              class="form"
-              novalidate="novalidate"
-              id="kt_login_forgot_form"
-              ref="kt_login_forgot_form"
-            >
-              <div class="pb-13 pt-lg-0 pt-5">
-                <h3
-                  class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg"
-                >
-                  Forgotten Password ?
-                </h3>
-                <p class="text-muted font-weight-bold font-size-h4">
-                  Enter your email to reset your password
-                </p>
-              </div>
-              <div class="form-group">
-                <input
-                  class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  autocomplete="off"
-                />
-              </div>
-              <div class="form-group d-flex flex-wrap pb-lg-0">
-                <button
-                  type="button"
-                  id="kt_login_forgot_submit"
-                  class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-4"
-                >
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  id="kt_login_forgot_cancel"
-                  class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3"
-                  @click="showForm('signin')"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-          <!--end::Forgot-->
         </div>
       </div>
-      <!--end::Content-->
     </div>
   </div>
 </template>
 
-<!-- Load login custom page styles -->
 <style lang="scss">
 @import "@/assets/sass/pages/login/login-1.scss";
 </style>
@@ -174,7 +113,6 @@
 <script>
 import formValidation from "@/assets/plugins/formvalidation/dist/es6/core/Core";
 
-// FormValidation plugins
 import Trigger from "@/assets/plugins/formvalidation/dist/es6/plugins/Trigger";
 import Bootstrap from "@/assets/plugins/formvalidation/dist/es6/plugins/Bootstrap";
 import SubmitButton from "@/assets/plugins/formvalidation/dist/es6/plugins/SubmitButton";

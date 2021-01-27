@@ -15,6 +15,7 @@
               v-model="searchForm"
               type="text"
               placeholder="Müşteri İsim, Soyisim, Telefon Numarası, Email ..."
+              @keypress.enter="searchUser"
             ></b-form-input>
           </b-input-group>
         </b-form-group>
@@ -42,6 +43,14 @@
     </b-row>
     <div class="card card-custom">
       <div class="card-body">
+        <button
+          class="btn font-weight-bold addCustomerButton"
+          style="float:right"
+          @click="createNewCustomer"
+        >
+          <i class="fas fa-user-plus addCustomerIcon"></i>
+          Yeni Müşteri Ekle
+        </button>
         <div
           class="datatable datatable-bordered datatable-head-custom datatable-default datatable-loaded"
         >
@@ -265,7 +274,11 @@
             @input="onChangePagination"
             style="margin-top:2%;"
           ></b-pagination>
-          <b-modal v-model="isShowDetailModal" size="xl" title="Müşteri Detayı">
+          <b-modal
+            v-model="isShowDetailModal"
+            size="xl"
+            title="Müşteri Bilgileri"
+          >
             <b-container fluid>
               <b-row>
                 <b-col>
@@ -309,7 +322,7 @@
                 </b-col>
               </b-row>
 
-              <b-row>
+              <b-row v-if="!isNewCustomer">
                 <b-col>
                   <label for="BirthDay">Doğum Günü</label>
                   <b-form-datepicker
@@ -317,6 +330,8 @@
                     v-model="editCustomer.BirthDay"
                     class="mb-8"
                     placeholder=""
+                    locale="tr"
+                    :hide-header="true"
                   ></b-form-datepicker>
                 </b-col>
                 <b-col>
@@ -326,11 +341,13 @@
                     v-model="editCustomer.AnniversaryDay"
                     class="mb-8"
                     placeholder=""
+                    locale="tr"
+                    :hide-header="true"
                   ></b-form-datepicker>
                 </b-col>
               </b-row>
 
-              <b-row>
+              <b-row v-if="!isNewCustomer">
                 <b-col>
                   <label>Sadakat Yıldızı</label>
                   <v-rating
@@ -360,7 +377,7 @@
                   class="btn font-weight-bold saveButton"
                   @click="saveCustomer"
                 >
-                  Kaydet
+                  {{ customerButton }}
                 </button>
               </div>
             </template>
@@ -474,12 +491,13 @@ export default {
       editCustomer: {},
       pageSize: 1,
       totalPage: 0,
-      perPage: 20,
+      perPage: 14,
       pageCustomerList: [],
       colorControl: 0,
       authToken: {},
       isShowListTenAppointment: false,
-      lastTenAppointment: []
+      lastTenAppointment: [],
+      isNewCustomer: false
     };
   },
   methods: {
@@ -601,6 +619,8 @@ export default {
       this.pageCustomerList = newUserList;
     },
     onEditCustomer(item) {
+      this.editCustomer = {};
+      this.isNewCustomer = false;
       if (this.authToken.AuthorityList.indexOf("edit_musteri") !== -1) {
         this.editCustomer = item;
         this.isShowDetailModal = true;
@@ -617,42 +637,76 @@ export default {
       }
     },
     saveCustomer() {
-      axios({
-        method: "post",
-        url: "https://kandilliservices.herokuapp.com/UpdateCustomer",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        data: {
-          CustomerId: this.editCustomer.CustomerId,
-          FirstName: this.editCustomer.FirstName,
-          LastName: this.editCustomer.LastName,
-          Phone: this.editCustomer.Phone,
-          Mail: this.editCustomer.Mail,
-          BlackListPoint: this.editCustomer.BlackListPoint,
-          BirthDay: this.editCustomer.BirthDay,
-          AnniversaryDay: this.editCustomer.AnniversaryDay,
-          Note: this.editCustomer.Note
-        }
-      }).then(result => {
-        if (result.data.code === 1) {
-          Swal.fire({
-            title: "",
-            text: "Müşteri bilgileri başarıyla güncellenmiştir.",
-            icon: "success",
-            timer: 3000
-          });
-          this.getCustomerInfo();
-          this.isShowDetailModal = false;
-        } else {
-          Swal.fire({
-            title: "",
-            text: "Müşteri bilgileri güncellenemedi.",
-            icon: "error",
-            timer: 3000
-          });
-        }
-      });
+      if (this.isNewCustomer) {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/AddCustomer",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            FirstName: this.editCustomer.FirstName,
+            LastName: this.editCustomer.LastName,
+            Phone: this.editCustomer.Phone,
+            Mail: this.editCustomer.Mail
+          }
+        }).then(result => {
+          if (result.data.code === 1) {
+            Swal.fire({
+              title: "",
+              text: "Müşteri bilgileri başarıyla kaydedilmiştir.",
+              icon: "success",
+              timer: 3000
+            });
+            this.getCustomerInfo();
+            this.isShowDetailModal = false;
+          } else {
+            Swal.fire({
+              title: "",
+              text: "Müşteri bilgileri kaydedilemedi.",
+              icon: "error",
+              timer: 3000
+            });
+          }
+        });
+      } else {
+        axios({
+          method: "post",
+          url: "https://kandilliservices.herokuapp.com/UpdateCustomer",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            CustomerId: this.editCustomer.CustomerId,
+            FirstName: this.editCustomer.FirstName,
+            LastName: this.editCustomer.LastName,
+            Phone: this.editCustomer.Phone,
+            Mail: this.editCustomer.Mail,
+            BlackListPoint: this.editCustomer.BlackListPoint,
+            BirthDay: this.editCustomer.BirthDay,
+            AnniversaryDay: this.editCustomer.AnniversaryDay,
+            Note: this.editCustomer.Note
+          }
+        }).then(result => {
+          if (result.data.code === 1) {
+            Swal.fire({
+              title: "",
+              text: "Müşteri bilgileri başarıyla güncellenmiştir.",
+              icon: "success",
+              timer: 3000
+            });
+            this.getCustomerInfo();
+            this.isShowDetailModal = false;
+          } else {
+            Swal.fire({
+              title: "",
+              text: "Müşteri bilgileri güncellenemedi.",
+              icon: "error",
+              timer: 3000
+            });
+          }
+        });
+      }
     },
     onChangePagination() {
       if (this.pageSize !== null) {
@@ -665,6 +719,20 @@ export default {
     onListLastTenAppointment(item) {
       this.lastTenAppointment = item.LastTenAppointment;
       this.isShowListTenAppointment = true;
+    },
+    createNewCustomer() {
+      this.editCustomer = {};
+      if (this.authToken.AuthorityList.indexOf("add_musteri") !== -1) {
+        this.isNewCustomer = true;
+        this.isShowDetailModal = true;
+      } else {
+        this.$bvToast.toast("Yeni müşteri eklemeye yetkiniz bulunmamaktadır.", {
+          title: "Uyarı",
+          variant: "danger",
+          toaster: "b-toaster-top-center",
+          solid: true
+        });
+      }
     }
   },
   mounted() {
@@ -675,6 +743,11 @@ export default {
     Vue.filter("formatDate", function(value) {
       return moment(value).format("DD.MM.yyyy");
     });
+  },
+  computed: {
+    customerButton() {
+      return this.isNewCustomer ? "Kaydet" : "Güncelle";
+    }
   }
 };
 </script>
@@ -688,7 +761,8 @@ export default {
   border-left: none;
 }
 .searchButton,
-.saveButton:hover {
+.saveButton:hover,
+.addCustomerButton:hover {
   border: 1px solid #12a293;
   color: #12a293;
   background-color: rgb(255, 255, 255);
@@ -702,7 +776,8 @@ export default {
   margin-right: 1%;
 }
 .searchButton:hover,
-.saveButton {
+.saveButton,
+.addCustomerButton {
   background-color: #12a293;
   color: white;
 }
@@ -714,6 +789,12 @@ export default {
 }
 .fa-search {
   cursor: default;
+  color: #12a293;
+}
+.addCustomerIcon {
+  color: white;
+}
+.addCustomerButton:hover .addCustomerIcon {
   color: #12a293;
 }
 </style>
