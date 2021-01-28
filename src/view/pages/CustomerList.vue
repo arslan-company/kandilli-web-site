@@ -54,7 +54,11 @@
         <div
           class="datatable datatable-bordered datatable-head-custom datatable-default datatable-loaded"
         >
-          <table class="datatable-table" style="display: block">
+          <table
+            class="datatable-table"
+            style="display:block"
+            :hidden="hiddenCustomerTable"
+          >
             <thead class="datatable-head">
               <tr class="datatable-row" style="left: 0px">
                 <th
@@ -273,6 +277,7 @@
             align="right"
             @input="onChangePagination"
             style="margin-top:2%;"
+            :hidden="hiddenCustomerTable"
           ></b-pagination>
           <b-modal
             v-model="isShowDetailModal"
@@ -307,7 +312,7 @@
                     <b-form-input
                       id="Phone"
                       v-model="editCustomer.Phone"
-                      type="text"
+                      type="number"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -497,7 +502,8 @@ export default {
       authToken: {},
       isShowListTenAppointment: false,
       lastTenAppointment: [],
-      isNewCustomer: false
+      isNewCustomer: false,
+      hiddenCustomerTable: true
     };
   },
   methods: {
@@ -527,11 +533,13 @@ export default {
     },
     getCustomerInfo() {
       this.searchForm = "";
+      this.hiddenCustomerTable = true;
       axios({
         method: "get",
         url: "https://kandilliservices.herokuapp.com/GetCustomerList"
       }).then(result => {
         if (result.data.data.length > 0) {
+          this.hiddenCustomerTable = false;
           this.customerList = result.data.data;
           if (this.customerList.length > this.perPage) {
             this.totalPage = this.customerList.length;
