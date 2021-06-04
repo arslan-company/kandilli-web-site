@@ -1001,4 +1001,8 @@ export default {
 .vuecal__today-btn span.default {
   color: white;
 }
+
+.day-split-header {
+  font-size: 9.5px;
+}
 </style>
