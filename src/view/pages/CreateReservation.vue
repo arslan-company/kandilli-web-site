@@ -696,6 +696,29 @@ export default {
     },
     onSelected(param) {
       if (param.class !== "past" && param.class !== "lunch") {
+        if (this.Appointment.PersonCount == 0) {
+          this.$bvToast.toast("Kişi sayısı seçmeden masa seçimi yapılamaz.", {
+            title: "Bilgilendirme",
+            variant: "warning",
+            toaster: "b-toaster-top-center",
+            solid: true
+          });
+          return;
+        }
+
+        if (this.Appointment.PersonCount > param.chairCount) {
+          this.$bvToast.toast(
+            "Kişi sayısı masada bulunan sandalye sayısından fazla olamaz.",
+            {
+              title: "Bilgilendirme",
+              variant: "warning",
+              toaster: "b-toaster-top-center",
+              solid: true
+            }
+          );
+          return;
+        }
+
         if (this.Appointment.SessionId !== 0) {
           const prevSelected = this.events.find(
             event =>
@@ -810,7 +833,8 @@ export default {
                 startTime: el.SessionStart,
                 endTime: el.SessionEnd,
                 backupCount: el.BackupCount,
-                content: content
+                content: content,
+                chairCount: el.ChairCount
               });
             });
             this.showCalendar = true;
