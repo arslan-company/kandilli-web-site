@@ -536,7 +536,7 @@ export default {
       this.hiddenCustomerTable = true;
       axios({
         method: "get",
-        url: "https://kandilliservices.herokuapp.com/GetCustomerList"
+        url: "https://kandilli.herokuapp.com//GetCustomerList"
       }).then(result => {
         if (result.data.data.length > 0) {
           this.hiddenCustomerTable = false;
@@ -571,7 +571,7 @@ export default {
       if (this.authToken.AuthorityList.indexOf("delete_musteri") !== -1) {
         axios({
           method: "post",
-          url: "https://kandilliservices.herokuapp.com/DeleteCustomer",
+          url: "https://kandilli.herokuapp.com//DeleteCustomer",
           headers: {
             "Content-Type": "application/json"
           },
@@ -648,7 +648,7 @@ export default {
       if (this.isNewCustomer) {
         axios({
           method: "post",
-          url: "https://kandilliservices.herokuapp.com/AddCustomer",
+          url: "https://kandilli.herokuapp.com//AddCustomer",
           headers: {
             "Content-Type": "application/json"
           },
@@ -680,7 +680,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: "https://kandilliservices.herokuapp.com/UpdateCustomer",
+          url: "https://kandilli.herokuapp.com//UpdateCustomer",
           headers: {
             "Content-Type": "application/json"
           },

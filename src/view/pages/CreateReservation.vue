@@ -650,7 +650,7 @@ export default {
 
     axios({
       method: "get",
-      url: "https://kandilliservices.herokuapp.com/GetTableList"
+      url: "https://kandilli.herokuapp.com//GetTableList"
     }).then(result => {
       if (result.data.data.length > 0) {
         result.data.data.forEach(el => {
@@ -669,7 +669,7 @@ export default {
     submit: function() {
       axios({
         method: "post",
-        url: "https://kandilliservices.herokuapp.com/AddAppointment",
+        url: "https://kandilli.herokuapp.com//AddAppointment",
         headers: {
           "Content-Type": "application/json"
         },
@@ -779,7 +779,7 @@ export default {
         axios({
           method: "post",
           url:
-            "https://kandilliservices.herokuapp.com/GetAppointmentFixtureByDate",
+            "https://kandilli.herokuapp.com//GetAppointmentFixtureByDate",
           headers: {
             "Content-Type": "application/json"
           },
@@ -858,7 +858,7 @@ export default {
       if (this.Customer.Phone.length === 11) {
         axios({
           method: "post",
-          url: "https://kandilliservices.herokuapp.com/CheckCustomer",
+          url: "https://kandilli.herokuapp.com//CheckCustomer",
           headers: {
             "Content-Type": "application/json"
           },
