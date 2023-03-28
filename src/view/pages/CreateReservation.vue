@@ -91,7 +91,6 @@
                           type="text"
                           :state="getValidationState(validationContext)"
                           aria-describedby="FirstNameFeedback"
-                          @change="checkCustomerInfo"
                         ></b-form-input>
 
                         <b-form-invalid-feedback id="FirstNameFeedback">
@@ -116,7 +115,6 @@
                           type="text"
                           :state="getValidationState(validationContext)"
                           aria-describedby="LastNameFeedback"
-                          @change="checkCustomerInfo"
                         ></b-form-input>
 
                         <b-form-invalid-feedback id="LastNameFeedback">
@@ -650,7 +648,7 @@ export default {
 
     axios({
       method: "get",
-      url: "https://kandilli.herokuapp.com//GetTableList"
+      url: "https://kandilli.herokuapp.com/GetTableList"
     }).then(result => {
       if (result.data.data.length > 0) {
         result.data.data.forEach(el => {
@@ -669,7 +667,7 @@ export default {
     submit: function() {
       axios({
         method: "post",
-        url: "https://kandilli.herokuapp.com//AddAppointment",
+        url: "https://kandilli.herokuapp.com/AddAppointment",
         headers: {
           "Content-Type": "application/json"
         },
@@ -779,7 +777,7 @@ export default {
         axios({
           method: "post",
           url:
-            "https://kandilli.herokuapp.com//GetAppointmentFixtureByDate",
+            "https://kandilli.herokuapp.com/GetAppointmentFixtureByDate",
           headers: {
             "Content-Type": "application/json"
           },
@@ -858,7 +856,7 @@ export default {
       if (this.Customer.Phone.length === 11) {
         axios({
           method: "post",
-          url: "https://kandilli.herokuapp.com//CheckCustomer",
+          url: "https://kandilli.herokuapp.com/CheckCustomer",
           headers: {
             "Content-Type": "application/json"
           },
@@ -881,46 +879,10 @@ export default {
             if (this.Customer.BlackListPoint < 3) {
               this.isBlackListDanger = true;
             }
-            this.checkCustomerInfo();
           }
         });
       }
     },
-    checkCustomerInfo() {
-      if (this.Customer.FirstName !== "" && this.Customer.LastName !== "") {
-        this.overlay = true;
-        axios({
-          method: "get",
-          url:
-            "https://google-search3.p.rapidapi.com/api/v1/search/q=" +
-            encodeURI(this.Customer.FirstName + "+" + this.Customer.LastName) +
-            "&lr=lang_tr&cr=TR",
-          headers: {
-            ["x-rapidapi-key"]:
-              "fe8b5a22fdmshd749bd0abc06febp110dcejsne9594a5d640a",
-            ["x-rapidapi-host"]: "google-search3.p.rapidapi.com"
-          }
-        }).then(res => {
-          this.customerInfoGoogle = res.data.results;
-          this.customerInfoGoogle.forEach(element => {
-            if (element.link.includes("instagram.com")) {
-              element.imageURL = "media/instagram.png";
-            } else if (element.link.includes("facebook.com")) {
-              element.imageURL = "media/facebook.png";
-            } else if (element.link.includes("twitter.com")) {
-              element.imageURL = "media/twitter.png";
-            } else if (element.link.includes("linkedin.com")) {
-              element.imageURL = "media/linkedin.webp";
-            } else if (element.link.includes("wikipedia.org")) {
-              element.imageURL = "media/wikipedia.png";
-            } else {
-              element.imageURL = "media/google.png";
-            }
-          });
-          this.overlay = false;
-        });
-      }
-    }
   }
 };
 </script>

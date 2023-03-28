@@ -10,7 +10,7 @@ import decode from "jwt-decode";
 const ApiService = {
   init() {
     Vue.use(VueAxios, axios);
-    Vue.axios.defaults.baseURL = "https://kandilli.herokuapp.com/";
+    Vue.axios.defaults.baseURL = "https://kandilli.herokuapp.com";
   },
 
   /**
